@@ -1,0 +1,10 @@
+<div>
+    <button class="button" data-selector="loginButton" v-if="!isLoggedIn" @click="onPressLoginButton">Log in</button>
+    <div v-else>
+        <p data-selector="welcomeMessage">
+            Welcome <strong>{{authStore.get().username}}</strong>!
+        </p>
+        <button class="button" data-selector="logoutButton" @click="onPressLogoutButton">Log out</button>            
+    </div>
+    <LoginModalVue v-if="isOpen" :onClose="onCloseModal" />
+</div>

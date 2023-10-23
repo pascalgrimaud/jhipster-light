@@ -1,0 +1,60 @@
+import { PropType, defineComponent, inject, ref } from 'vue';
+import { LocalStorageAuth } from '@/login/secondary/LocalStorageAuth';
+import { RestAuth } from '@/login/secondary/RestAuth';
+
+export default defineComponent({
+  name: 'LoginModalVue',
+  props: {
+    onClose: {
+      type: Object as PropType<() => void>,
+      required: true
+    }
+  },
+  setup({ onClose }) {
+    const error = ref<boolean>(false);
+    const usernameForm = ref<string | undefined>("");
+    const passwordForm = ref<string | undefined>("");
+
+    const authStore = inject("authStore") as LocalStorageAuth;
+    const restAuth = inject("restAuth") as RestAuth;
+
+    const onSubmit = async (event: Event) => {
+      event.preventDefault();
+      if(usernameForm.value && passwordForm.value){
+        const data = await restAuth.get(
+          { 
+            username: usernameForm.value,
+            password: passwordForm.value,
+            rememberMe: true
+          }
+        );
+        
+        authStore.store(
+          { 
+            id_token: data.id_token,
+            username: usernameForm.value
+          }
+        );
+        
+        error.value = false;
+        onClose();
+      } else {
+        error.value = true
+      };
+    };
+
+    const handleClose = () => {
+      error.value = false;
+      onClose();
+    }
+
+    return {
+      error,
+      usernameForm,
+      passwordForm,
+      onSubmit,
+      onClose,
+      handleClose
+    };
+  },
+});

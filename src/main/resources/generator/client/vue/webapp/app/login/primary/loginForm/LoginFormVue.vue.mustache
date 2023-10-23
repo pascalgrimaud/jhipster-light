@@ -1,0 +1,47 @@
+<template src="./login-form.html"></template>
+
+<script lang="ts" src="./LoginForm.component.ts"></script>
+
+<style lang="scss">
+
+    .button {
+        border: none;
+        outline: none;
+        padding: 0.5rem 1rem;
+        border-radius: 7px;
+        cursor: pointer;
+
+        &.-circle {
+            padding: 0.25rem;
+            border-radius: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+
+    .button:hover {
+        background-color: #e7f1fe;
+    }
+
+    .text-input::placeholder {
+        color: #0070f0;
+    }
+
+    .text-input {
+        background-color: #e7f1fe;
+        border: none;
+        outline: none;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 0.5rem;
+        border-radius: 7px;
+    }
+
+    .small-text {
+        font-size: 0.875rem;
+    }
+
+</style>

@@ -1,0 +1,129 @@
+import axios from 'axios';
+import { vi, describe, it, expect, SpyInstance } from 'vitest';
+import { mount, VueWrapper } from '@vue/test-utils';
+import { LoginFormVue } from '@/login/primary/loginForm/index';
+import { RestAuth } from '@/login/secondary/RestAuth';
+import { LocalStorageAuth } from '@/login/secondary/LocalStorageAuth';
+
+let wrapper: VueWrapper;
+let restAuthSpy: SpyInstance
+
+const wrap = () => {
+  const restAuth = new RestAuth(axios.create({ baseURL: '' }));
+
+  wrapper = mount(LoginFormVue,{
+    global: {
+      provide:{
+        restAuth,
+        authStore: new LocalStorageAuth(localStorage)
+      }
+    }
+  });
+
+  restAuthSpy = vi.spyOn(restAuth, 'get');
+  restAuthSpy.mockImplementationOnce(() => Promise.resolve({ id_token: '123' }));
+};
+
+
+const selector = (name : string) : string => `[data-selector="${name}"]`;
+
+const login = async () => {
+  const submitButton = wrapper.find(selector("submitButton"));
+  
+  const usernameInput = wrapper.find(selector("usernameInput"));
+  const passwordInput = wrapper.find(selector("passwordInput"));
+  const rememberMeInput = wrapper.find(selector("rememberMeInput"));
+  
+  await usernameInput.setValue("admin");
+  await wrapper.vm.$nextTick();
+  await passwordInput.setValue("admin");
+  await wrapper.vm.$nextTick();
+  await rememberMeInput.setValue("true");
+  await wrapper.vm.$nextTick();
+
+  await submitButton.trigger("click");
+  await wrapper.vm.$nextTick();
+};
+
+describe('loginForm', () => {
+  it('should render the login button without crashing', () => {
+    wrap();
+
+    expect(wrapper.exists()).toBeTruthy();
+  });
+
+  it('render the modal on login button click', async () => {
+    wrap();
+
+    const loginButton = wrapper.find(selector("loginButton"));
+    await loginButton.trigger('click')
+    await wrapper.vm.$nextTick();
+    
+    const modal = wrapper.find(selector("modal"));
+    expect(modal.exists()).toBeTruthy();
+  });
+
+  it('should show error message', async () => {
+    wrap();
+
+    const loginButton = wrapper.find(selector("loginButton"));
+    await loginButton.trigger('click');
+    await wrapper.vm.$nextTick();
+    
+    const submitButton = wrapper.find(selector("submitButton"));
+    await submitButton.trigger('click')
+    await wrapper.vm.$nextTick();
+
+    const errorMessage = wrapper.find(selector("errorMessage"));
+    
+    expect(errorMessage.exists()).toBeTruthy();
+  });
+
+  it('should logout when clicking logout button', async () => {
+    wrap();
+
+    await wrapper.find(selector("loginButton")).trigger('click');
+    await wrapper.vm.$nextTick();
+    
+    await login();
+    
+    await wrapper.find(selector("logoutButton")).trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(selector("loginButton")).exists()).toBeTruthy();
+  });
+
+  it('should close the modal when close button is pressed', async () => {
+    wrap();
+
+    await wrapper.find(selector("loginButton")).trigger('click');
+    await wrapper.vm.$nextTick();
+    
+    expect(wrapper.find(selector("modal")).exists()).toBeTruthy();
+    
+    await wrapper.find(selector("closeButton")).trigger('click');
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(selector("modal")).exists()).toBeFalsy();
+  });
+
+  it('should close when clicking submit button with complete fields', async () => {
+    wrap();
+
+    await wrapper.find(selector("loginButton")).trigger('click');
+    await wrapper.vm.$nextTick();
+    
+    await login();
+
+    expect(restAuthSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show logout button if already logged in', async () => {
+    localStorage.setItem('auth',JSON.stringify({ id_token: '123', username: '123' }));
+  
+    wrap();
+    await wrapper.vm.$nextTick();
+  
+    expect(wrapper.find(selector("logoutButton")).exists()).toBeTruthy(); 
+  });
+});

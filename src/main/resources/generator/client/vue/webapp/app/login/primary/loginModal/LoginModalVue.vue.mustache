@@ -1,0 +1,48 @@
+<template src="./login-modal.html"></template>
+
+<script lang="ts" src="./LoginModal.component.ts"></script>
+
+<style lang="scss">
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #0000003F;
+        backdrop-filter: blur(5px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        
+        &--content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 28rem;
+            width: 400px;
+            background-color: white;
+            border-radius: 7px;
+        }
+
+        &--header {
+            display: flex;
+            padding: 1rem 1.5rem;
+            width: 90%;
+            font-size: 1.125rem;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        &--body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    }
+</style>

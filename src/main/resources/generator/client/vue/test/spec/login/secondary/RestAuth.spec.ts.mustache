@@ -1,0 +1,53 @@
+import { UserSession } from '@/login/domain/UserSession';
+import { RestAuth } from '@/login/secondary/RestAuth';
+import { AxiosInstance } from 'axios';
+import { describe, it, expect, vi, Mock } from 'vitest';
+
+export interface AxiosInstanceStub extends AxiosInstance {
+  get: Mock<any,any>;
+  post: Mock<any,any>;
+  delete: Mock<any,any>;
+  put: Mock<any,any>;
+};
+
+export const stubAxiosInstance = (): AxiosInstanceStub =>
+  ({
+    get: vi.fn(),
+    post: vi.fn(),
+    delete: vi.fn(),
+    put: vi.fn(),
+  }) as AxiosInstanceStub;
+
+describe('RestAuth', () => {
+  it('should return a promise', () => {
+    const axiosInstance = stubAxiosInstance();
+
+    const restAuth = new RestAuth(axiosInstance);
+    
+    axiosInstance.post.mockResolvedValue(new Promise((resolve, reject) => { reject('error'); }))
+
+    expect(restAuth.get({
+      username: 'test',
+      password: 'test',
+      rememberMe: true
+    })).toBeInstanceOf(Promise);
+  });
+
+  it('should get id_token as response', async () => {
+    const fakeResponse: UserSession = { id_token: '123' };
+
+    const axiosInstance = stubAxiosInstance();
+
+    const restAuth = new RestAuth(axiosInstance);
+    
+    axiosInstance.post.mockResolvedValue(new Promise((resolve) => { resolve({ data: fakeResponse }); }))
+    
+    const response = await restAuth.get({
+      username: 'test',
+      password: 'test',
+      rememberMe: true
+    });
+    
+    expect(response).toEqual(fakeResponse);
+  });
+});

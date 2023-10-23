@@ -1,0 +1,52 @@
+import { UserSession } from '@/login/domain/UserSession';
+import { LocalStorageAuth } from '@/login/secondary/LocalStorageAuth';
+import { describe, it, expect } from 'vitest';
+
+const fakeStorage = (): Storage => {
+  let store: { [key: string]: string } = {};
+  return {
+    getItem: (key: string) => store[key],
+    setItem: (key: string, value: string) => (store[key] = value),
+    removeItem: (key: string) => delete store[key],
+    clear: () => (store = {}),
+    get length() {
+      return Object.keys(store).length;
+    },
+    key: (index: number) => Object.keys(store)[index],
+  };
+};
+
+const fakeData: UserSession = {
+  id_token: "123",
+  username: "456"
+};
+
+describe('LocalStorageAuth', () => {
+  it('should store auth data', () => {
+    const storage = fakeStorage();
+    const authStore = new LocalStorageAuth(storage);
+    authStore.store(fakeData);
+
+    expect(JSON.parse(storage.getItem("auth")!)).toEqual(fakeData);
+  });
+
+  it('should clear the auth data from the storage', async () => {
+    const storage = fakeStorage();
+    const authStore = new LocalStorageAuth(storage);
+    authStore.store(fakeData);
+    
+    expect(JSON.parse(storage.getItem("auth")!)).toEqual(fakeData);
+    
+    authStore.clear();
+    
+    expect(storage.getItem("auth")).toEqual(undefined);
+  });
+
+  it('should get the auth data from the storage', async () => {
+    const storage = fakeStorage();
+    const authStore = new LocalStorageAuth(storage);
+    authStore.store(fakeData);
+    
+    expect(authStore.get()).toEqual(fakeData);
+  });
+});

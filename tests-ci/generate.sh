@@ -371,6 +371,10 @@ elif [[ $application == 'vueapp' ]]; then
   "vue-pinia" \
   "cypress"
 
+  cucumber_with_jwt
+
+  applyModules "vue-jwt"
+
 elif [[ $application == 'svelteapp' ]]; then
   spring_boot_mvc
   sonar_back_front

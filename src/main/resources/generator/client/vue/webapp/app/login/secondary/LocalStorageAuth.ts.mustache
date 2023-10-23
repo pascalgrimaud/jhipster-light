@@ -1,0 +1,28 @@
+import { AuthRepository } from "../domain/AuthRepository";
+import { UserSession } from "../domain/UserSession";
+
+const STORAGE_KEY_AUTH = 'auth';
+
+export class LocalStorageAuth implements AuthRepository {
+  private readonly localStorage: Storage;
+
+  constructor(localStorage: Storage) {
+    this.localStorage = localStorage;
+  }
+
+  store(data: UserSession): void {
+    this.localStorage.setItem(STORAGE_KEY_AUTH, JSON.stringify(data));
+  }
+
+  get(): UserSession | null {
+    const storedValue = this.localStorage.getItem(STORAGE_KEY_AUTH);
+    if (storedValue) {
+      return JSON.parse(storedValue);
+    }
+    return null;
+  }
+
+  clear(): void {
+    this.localStorage.removeItem(STORAGE_KEY_AUTH);
+  }
+}

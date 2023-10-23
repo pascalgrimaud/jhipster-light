@@ -1,0 +1,7 @@
+import { UserSession } from "./UserSession";
+
+export interface AuthRepository {
+    store(data: UserSession): void;
+    get(): UserSession | null;
+    clear(): void;
+};

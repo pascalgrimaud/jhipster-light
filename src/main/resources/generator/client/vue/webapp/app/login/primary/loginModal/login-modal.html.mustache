@@ -1,0 +1,31 @@
+<div class="modal" data-selector="modal">
+  <div class="modal--content">
+    <div class="modal--header">
+      <div>
+        <span>Connect</span><span> JHipster Lite</span>
+      </div>
+      <button role="button" data-selector="closeButton" class="button -circle" type="button" @click="handleClose">
+        <svg aria-hidden="true" fill="none" focusable="false" height="1em" role="presentation" stroke="currentColor"
+          stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="1em">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="modal--body">
+      <form>
+        <input class="text-input" placeholder="Nom d'utilisateur" type="text" :value="usernameForm"
+          @input="event => usernameForm = event.target.value" name="username" data-selector="usernameInput" />
+        <input class="text-input" placeholder="Mot de passe" type="password" :value="passwordForm"
+          @input="event => passwordForm = event.target.value" name="password" data-selector="passwordInput" />
+        <p v-if="error" data-selector="errorMessage">Please complete fields above</p>
+        <div>
+          <input type="checkbox" name="rememberMe" data-selector="rememberMeInput" />
+          <label class="small-text">Remember me</label>
+        </div>
+        <button class="button" @click="onSubmit" data-selector="submitButton" type="submit">
+          Log in
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

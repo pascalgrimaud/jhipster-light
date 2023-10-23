@@ -1,0 +1,11 @@
+import { UserSession } from "./UserSession";
+
+export interface UserCredentials {
+    username: string,
+    password: string,
+    rememberMe: boolean
+};
+
+export interface Auth {
+  get(data: UserCredentials): Promise<UserSession>;
+}

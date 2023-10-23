@@ -1,0 +1,40 @@
+import { LoginModalVue } from '../loginModal';
+import { defineComponent, inject, ref } from 'vue';
+import { LocalStorageAuth } from '@/login/secondary/LocalStorageAuth';
+
+export default defineComponent({
+  name: 'LoginFormVue',
+  components: { LoginModalVue },
+  setup() {
+    const isOpen = ref<boolean>(false);
+    
+    const authStore = inject("authStore") as LocalStorageAuth;
+    const isLoggedIn = ref<boolean>(!!authStore.get());
+
+    const onPressLoginButton = () => { isOpen.value = true; };
+
+    const onPressLogoutButton = () => {
+      authStore.clear();
+      isLoggedIn.value = false;
+    };
+  
+    const updateAuthState = (): boolean => {
+      isLoggedIn.value = !!authStore.get();
+      return isLoggedIn.value;
+    }
+
+    const onCloseModal = () : void => { 
+      isOpen.value = false;
+      updateAuthState();
+    };
+
+    return {
+      isOpen,
+      onPressLoginButton,
+      onPressLogoutButton,
+      onCloseModal,
+      authStore,
+      isLoggedIn
+    };
+  },
+});

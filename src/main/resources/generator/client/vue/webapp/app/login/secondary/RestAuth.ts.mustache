@@ -1,0 +1,16 @@
+import { AxiosInstance } from "axios";
+import { Auth, UserCredentials } from "../domain/Auth";
+import { UserSession } from "../domain/UserSession";
+
+const LOGIN_URL = '/api/authenticate';
+
+export class RestAuth implements Auth {
+  constructor(private readonly axiosInstance: AxiosInstance) {}
+
+  get(data: UserCredentials): Promise<UserSession> {
+    return this.axiosInstance
+      .post<UserCredentials>(LOGIN_URL, data)
+      .then((response) => response.data)
+      .catch((error) => Promise.resolve(error));
+  }
+}
