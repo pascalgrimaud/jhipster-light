@@ -2,30 +2,19 @@
   "name": "jhipster-lite-svelte-kit",
   "version": "0.0.1",
   "type": "module",
-  "dependencies": {
-    "svelte-navigator": "3.2.2"
-  },
   "devDependencies": {
-    "@babel/preset-env": "7.22.9",
-    "@sveltejs/adapter-static": "2.0.3",
-    "@sveltejs/kit": "1.22.3",
-    "@testing-library/svelte": "4.2.3",
-    "@typescript-eslint/eslint-plugin": "6.0.0",
-    "@typescript-eslint/parser": "6.0.0",
-    "@vitest/coverage-istanbul": "0.33.0",
-    "babel-plugin-transform-vite-meta-env": "1.0.3",
-    "eslint": "8.44.0",
-    "eslint-plugin-svelte3": "4.0.0",
-    "jsdom": "22.1.0",
-    "prettier": "2.8.8",
-    "prettier-plugin-svelte": "2.10.1",
-    "svelte": "3.59.2",
-    "svelte-check": "3.8.4",
-    "svelte-preprocess": "5.0.4",
-    "tslib": "2.6.3",
-    "typescript": "5.1.6",
-    "vite": "4.5.3",
-    "vitest": "0.33.0",
-    "vitest-sonar-reporter": "0.5.0"
+    "@sveltejs/adapter-static": "3.0.5",
+    "@sveltejs/kit": "2.5.28",
+    "@sveltejs/vite-plugin-svelte": "3.1.2",
+    "@testing-library/jest-dom": "6.5.0",
+    "@testing-library/svelte": "5.2.1",
+    "@testing-library/user-event": "14.5.2",
+    "@types/eslint": "9.6.1",
+    "@vitest/coverage-v8": "2.1.1",
+    "@vitest/ui": "2.1.1",
+    "eslint-plugin-svelte": "2.44.0",
+    "prettier-plugin-svelte": "3.2.6",
+    "svelte": "4.2.19",
+    "svelte-check": "4.0.2"
   }
 }

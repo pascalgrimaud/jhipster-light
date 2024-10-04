@@ -254,6 +254,7 @@ jobs:
           - customjhlite
           - typescriptapp
           - thymeleafapp
+          - svelteapp
         include:
           - java-build-tool: maven
           - spring-config-format: yaml

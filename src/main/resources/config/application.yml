@@ -67,7 +67,6 @@ application:
 
 jhlite-hidden-resources:
   slugs:
-    - svelte-core
     - tikui
 
 jhlite-preset-file:

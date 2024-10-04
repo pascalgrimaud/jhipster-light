@@ -6,4 +6,8 @@ Feature: Svelte
       | prettier    |
       | svelte-core |
     Then I should have files in ""
-      | tsconfig.json |
+      | jsconfig.json    |
+      | vitest-setup.js  |
+      | vite.config.js   |
+      | svelte.config.js |
+      | eslint.config.js |

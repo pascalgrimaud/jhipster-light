@@ -1,6 +1,12 @@
 package tech.jhipster.lite.generator.client.svelte.core.domain;
 
-import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.*;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.ModuleFile;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.assertThatModuleWithFiles;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.file;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.lintStagedConfigFile;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.nodeDependency;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.nodeScript;
+import static tech.jhipster.lite.module.infrastructure.secondary.JHipsterModulesAssertions.packageJsonFile;
 
 import org.junit.jupiter.api.Test;
 import tech.jhipster.lite.TestFileUtils;
@@ -21,58 +27,74 @@ class SvelteModuleFactoryTest {
     JHipsterModule module = factory.buildSvelteModule(properties);
 
     // @formatter:off
-    assertThatModuleWithFiles(module, packageJsonFile(), lintStagedConfigFile())
+    assertThatModuleWithFiles(module, packageJsonFile(), lintStagedConfigFile(), prettierRcFile())
       .hasFile(".gitignore")
         .containing("""
-          # Svelte
-          .svelte-kit/\
+          # Vite
+          vite.config.js.timestamp-*
+          # Env
+          .env
+          .env.*
+          !.env.test\
           """)
         .and()
       .hasFile("package.json")
-        .containing(nodeDependency("svelte-navigator"))
-        .containing(nodeDependency("@babel/preset-env"))
         .containing(nodeDependency("@sveltejs/adapter-static"))
         .containing(nodeDependency("@sveltejs/kit"))
+        .containing(nodeDependency("@sveltejs/vite-plugin-svelte"))
+        .containing(nodeDependency("@testing-library/jest-dom"))
         .containing(nodeDependency("@testing-library/svelte"))
-        .containing(nodeDependency("@typescript-eslint/eslint-plugin"))
-        .containing(nodeDependency("@typescript-eslint/parser"))
-        .containing(nodeDependency("@vitest/coverage-istanbul"))
-        .containing(nodeDependency("babel-plugin-transform-vite-meta-env"))
+        .containing(nodeDependency("@testing-library/user-event"))
+        .containing(nodeDependency("@vitest/coverage-v8"))
+        .containing(nodeDependency("@vitest/ui"))
+        .containing(nodeDependency("@types/eslint"))
         .containing(nodeDependency("eslint"))
         .containing(nodeDependency("eslint-config-prettier"))
-        .containing(nodeDependency("eslint-plugin-svelte3"))
+        .containing(nodeDependency("eslint-plugin-svelte"))
+        .containing(nodeDependency("globals"))
         .containing(nodeDependency("jsdom"))
-        .containing(nodeDependency("prettier"))
         .containing(nodeDependency("prettier-plugin-svelte"))
         .containing(nodeDependency("svelte"))
         .containing(nodeDependency("svelte-check"))
-        .containing(nodeDependency("svelte-preprocess"))
-        .containing(nodeDependency("tslib"))
         .containing(nodeDependency("typescript"))
         .containing(nodeDependency("vite"))
         .containing(nodeDependency("vitest"))
         .containing(nodeDependency("vitest-sonar-reporter"))
-        .containing(nodeScript("dev", "vite dev --port 9000"))
-        .containing(nodeScript("start", "vite dev --port 9000"))
+
+        .containing(nodeScript("start", "vite dev --port 9000 --open"))
         .containing(nodeScript("build", "vite build"))
-        .containing(nodeScript("package", "vite package"))
         .containing(nodeScript("preview", "vite preview"))
-        .containing(nodeScript("check", "svelte-check --tsconfig ./tsconfig.json"))
-        .containing(nodeScript("check:watch", "svelte-check --tsconfig ./tsconfig.json --watch"))
-        .containing(nodeScript("lint", "prettier --ignore-path .gitignore --check && eslint --ignore-path .gitignore ."))
-        .containing(nodeScript("format", "prettier --ignore-path .gitignore --write"))
-        .containing(nodeScript("test", "npm run test:watch"))
-        .containing(nodeScript("test:coverage", "vitest run --coverage"))
-        .containing(nodeScript("test:watch", "vitest --"))
+    		.containing(nodeScript("check", "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json"))
+        .containing(nodeScript("lint", "prettier --check . && eslint ."))
+        .containing(nodeScript("format", "prettier --write '{,src/**/,cypress/**/}*.{md,json,js,cjs,svelte,css,html,yml}'"))
+        .containing(nodeScript("test", "vitest run --coverage"))
+        .containing(nodeScript("test:ui", "vitest --ui --coverage"))
+        .containing(nodeScript("test:watch", "vitest"))
+
         .containing("\"type\": \"module\"")
         .and()
-      .hasFiles(".eslintignore", ".eslintrc.cjs", ".npmrc", "tsconfig.json", "svelte.config.js", "vite.config.js", "vitest.config.ts")
-      .hasPrefixedFiles("src/main/webapp", "app.html", "app.d.ts")
+      .hasFile(".lintstagedrc.cjs")
+        .containing(
+          """
+            module.exports = {
+              '{src/**/,}*.{js,svelte}': ['eslint --fix', 'prettier --write', 'npm run check'],
+              '*.{md,json,yml,html,css,scss,java,xml,feature}': ['prettier --write'],
+            };
+            """
+        )
+      .and()
+      .hasFiles("eslint.config.js", ".npmrc", "jsconfig.json", "svelte.config.js", "vite.config.js", "vitest-setup.js")
+      .hasPrefixedFiles("src/main/webapp", "app.html")
       .hasPrefixedFiles("src/main/webapp/routes", "+page.svelte")
-      .hasPrefixedFiles("src/test/webapp/unit/common/primary/app", "App.spec.ts")
-      .hasPrefixedFiles("src/main/webapp/app/common/primary/app", "App.svelte")
-      .hasPrefixedFiles("src/main/webapp/assets", "JHipster-Lite-neon-orange.png")
-      .hasPrefixedFiles("src/main/webapp/assets", "svelte-logo.png");
+      .hasPrefixedFiles("src/main/webapp/lib/common/primary/app", "App.spec.js")
+      .hasPrefixedFiles("src/main/webapp/lib/common/primary/app", "App.svelte")
+      .hasPrefixedFiles("src/main/webapp/assets", "favicon.png")
+      .hasPrefixedFiles("src/main/webapp/assets/img", "jhipster-lite-neon-orange.png")
+      .hasPrefixedFiles("src/main/webapp/assets/img", "svelte-logo.png");
     // @formatter:on
+  }
+
+  public static ModuleFile prettierRcFile() {
+    return file("src/test/resources/projects/prettier/.prettierrc", ".prettierrc");
   }
 }

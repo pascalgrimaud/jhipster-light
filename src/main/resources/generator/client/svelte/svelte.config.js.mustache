@@ -1,9 +1,9 @@
-import adapter from '@sveltejs/adapter-static';
-import preprocess from 'svelte-preprocess';
+import adapter from '@sveltejs/adapter-static'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
-  preprocess: preprocess(),
-
+  preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
       pages: '{{projectBuildDirectory}}/classes/static/',
@@ -15,13 +15,15 @@ const config = {
       routes: 'src/main/webapp/routes',
       appTemplate: 'src/main/webapp/app.html',
       assets: 'src/main/webapp/assets',
-      hooks: {
-        server: 'src/main/webapp/hooks',
-      },
       lib: 'src/main/webapp/lib',
       serviceWorker: 'src/main/webapp/service-worker',
     },
+    alias: {
+      $lib: 'src/main/webapp/lib',
+      '$lib/*': 'src/main/webapp/lib/*',
+    },
+    outDir: '{{projectBuildDirectory}}/svelte-kit',
   },
-};
+}
 
 export default config;
