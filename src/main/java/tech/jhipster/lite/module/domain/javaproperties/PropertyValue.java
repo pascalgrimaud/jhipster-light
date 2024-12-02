@@ -1,7 +1,7 @@
 package tech.jhipster.lite.module.domain.javaproperties;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import tech.jhipster.lite.shared.collection.domain.JHipsterCollections;
@@ -39,7 +39,7 @@ public final class PropertyValue {
   }
 
   public static PropertyValue merge(PropertyValue v1, PropertyValue v2) {
-    Collection<Object> mergedValues = new ArrayList<>();
+    Collection<Object> mergedValues = new LinkedHashSet<>();
     mergedValues.addAll(v1.get());
     mergedValues.addAll(v2.get());
 

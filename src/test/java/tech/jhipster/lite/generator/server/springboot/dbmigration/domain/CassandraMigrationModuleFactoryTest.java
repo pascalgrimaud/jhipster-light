@@ -57,7 +57,7 @@ class CassandraMigrationModuleFactoryTest {
       .hasPrefixedFiles("src/main/docker/cassandra/scripts", "autoMigrate.sh", "execute-cql.sh")
       .hasFiles("src/test/java/tech/jhipster/jhlitest/TestCassandraMigrationLoader.java")
       .hasFile("src/test/resources/META-INF/spring.factories")
-      .containing(
+      .containingInSequence(
         "org.springframework.context.ApplicationListener=tech.jhipster.jhlitest.TestCassandraManager,tech.jhipster.jhlitest.TestCassandraMigrationLoader"
       )
       .and()

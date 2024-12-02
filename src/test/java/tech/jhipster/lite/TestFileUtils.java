@@ -1,12 +1,13 @@
 package tech.jhipster.lite;
 
-import static java.nio.file.StandardCopyOption.*;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 import tech.jhipster.lite.module.domain.properties.JHipsterProjectFolder;
@@ -40,6 +41,14 @@ public final class TestFileUtils {
 
   public static String contentNormalizingNewLines(Path path) {
     return content(path).replace("\r\n", "\n");
+  }
+
+  public static List<String> fileLines(Path path) {
+    try {
+      return Files.readAllLines(path);
+    } catch (IOException e) {
+      throw new AssertionError(e);
+    }
   }
 
   public static void loadDefaultProperties(Path from, Path to) {
