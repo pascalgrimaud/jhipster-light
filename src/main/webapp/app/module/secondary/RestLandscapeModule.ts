@@ -26,6 +26,7 @@ export const toLandscapeModule = (module: RestLandscapeModule): LandscapeModule 
     operation: module.operation,
     properties: toPropertiesDefinitions(module.properties),
     dependencies: toModuleDependencies(module.dependencies),
+    rank: module.rank,
   });
 
 const toModuleDependencies = (dependencies: RestLandscapeDependency[] | undefined): LandscapeElementId[] => {
