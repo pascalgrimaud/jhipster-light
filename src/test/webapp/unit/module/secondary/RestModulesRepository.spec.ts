@@ -1,3 +1,4 @@
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import { Presets } from '@/module/domain/Presets';
 import { RestLandscape } from '@/module/secondary/RestLandscape';
@@ -234,12 +235,14 @@ const landscapeModule = (
   operation: string,
   properties: RestModulePropertiesDefinitions,
   dependencies?: RestLandscapeDependency[],
+  rank: ModuleRank = 'RANK_D',
 ): RestLandscapeModule => ({
   type: 'MODULE',
   slug,
   operation,
   properties,
   dependencies,
+  rank,
 });
 
 const landscapeFeature = (slug: string, modules: RestLandscapeModule[]): RestLandscapeFeature => ({

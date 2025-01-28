@@ -3,6 +3,7 @@ import { LandscapeElementId } from '@/module/domain/landscape/LandscapeElementId
 import { LandscapeFeature } from '@/module/domain/landscape/LandscapeFeature';
 import { LandscapeFeatureSlug } from '@/module/domain/landscape/LandscapeFeatureSlug';
 import { LandscapeModule } from '@/module/domain/landscape/LandscapeModule';
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { ModulePropertyDefinition } from '@/module/domain/ModulePropertyDefinition';
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import {
@@ -84,12 +85,14 @@ const initialModule = (
   operation: string,
   properties: ModulePropertyDefinition[],
   dependencies: LandscapeElementId[],
+  rank: ModuleRank = 'RANK_D',
 ): LandscapeModule =>
   LandscapeModule.initialState({
     slug: moduleSlug(slug),
     operation,
     properties,
     dependencies,
+    rank,
   });
 
 const featureSlugs = (...slugs: string[]): LandscapeFeatureSlug[] => slugs.map(featureSlug);
