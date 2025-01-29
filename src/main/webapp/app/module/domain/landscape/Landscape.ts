@@ -407,6 +407,12 @@ export class Landscape {
     return this.properties;
   }
 
+  public hasModuleDifferentRank(module: ModuleSlug, rank: ModuleRank): boolean {
+    return Optional.ofNullable(this.modules.get(module.get()))
+      .map(currentModule => currentModule.rank() !== rank)
+      .orElse(false);
+  }
+
   public filterByRank(rank: ModuleRank | undefined): Landscape {
     return Optional.ofNullable(rank)
       .map(currentRank => this.createFilteredLandscape(currentRank))

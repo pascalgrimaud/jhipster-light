@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="jhipster-landscape-rank-module-selection">
-    <LandscapeRankModuleFilterVue />
+    <LandscapeRankModuleFilterVue @selected="handleRankFilter" />
   </div>
   <div class="jhipster-landscape-preset-selection">
     <LandscapePresetConfigurationVue :selectedPresetName="selectedPresetName" @selected="selectModulesFromPreset" />

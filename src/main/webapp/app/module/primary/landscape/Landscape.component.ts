@@ -19,6 +19,7 @@ import { LandscapeFeatureSlug } from '@/module/domain/landscape/LandscapeFeature
 import { LandscapeLevel } from '@/module/domain/landscape/LandscapeLevel';
 import { LandscapeModule } from '@/module/domain/landscape/LandscapeModule';
 import { LandscapeSelectionElement } from '@/module/domain/landscape/LandscapeSelectionElement';
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
 import { IconVue } from '@/shared/icon/infrastructure/primary';
@@ -58,8 +59,10 @@ export default defineComponent({
     const projectFolders = inject(PROJECT_FOLDERS_REPOSITORY);
 
     const selectedMode = ref<DisplayMode>('COMPACTED');
+    const selectedRank = ref<ModuleRank | undefined>(undefined);
 
     const landscape = ref(Loader.loading<Landscape>());
+    const originalLandscape = ref(Loader.loading<Landscape>());
     const levels = ref(Loader.loading<LandscapeLevel[]>());
 
     const canLoadMiniMap = ref(false);
@@ -144,6 +147,8 @@ export default defineComponent({
     };
 
     const loadLandscape = async (response: Landscape): Promise<void> => {
+      originalLandscape.value.loaded(response);
+
       landscape.value.loaded(response);
       levels.value.loaded(response.standaloneLevels());
 
@@ -282,6 +287,14 @@ export default defineComponent({
       await nextTick().then(updateConnectors);
     };
 
+    const diffRankMinimalEmphasisClass = (module: LandscapeElementId): string => {
+      if (!selectedRank.value || module instanceof LandscapeFeatureSlug) {
+        return '';
+      }
+
+      return landscapeValue().hasModuleDifferentRank(module as ModuleSlug, selectedRank.value) ? ' -diff-rank-minimal-emphasis' : '';
+    };
+
     const anchorPointClass = (module: LandscapeElementId): string => {
       if (module instanceof LandscapeFeatureSlug) {
         return '';
@@ -313,6 +326,7 @@ export default defineComponent({
         + flavorClass()
         + anchorPointClass(module)
         + searchHighlightClass(module)
+        + diffRankMinimalEmphasisClass(module)
       );
     };
 
@@ -622,6 +636,35 @@ export default defineComponent({
       }
     };
 
+    const handleRankFilter = (rank: ModuleRank | undefined): void => {
+      selectedRank.value = rank;
+      resetToOriginalLandscape().then(() => loadRankFilteredLandscape(landscapeValue().filterByRank(rank)));
+    };
+
+    const resetToOriginalLandscape = (): Promise<void> => {
+      return loadOriginalLandscape(originalLandscape.value.value());
+    };
+
+    const loadOriginalLandscape = async (response: Landscape): Promise<void> => {
+      landscape.value.loaded(response);
+      levels.value.loaded(response.standaloneLevels());
+    };
+
+    const loadRankFilteredLandscape = async (response: Landscape): Promise<void> => {
+      landscapeElements.value = new Map<string, HTMLElement>();
+
+      landscape.value.loaded(response);
+      levels.value.loaded(response.standaloneLevels());
+
+      await nextTick();
+
+      updateConnectors();
+
+      landscapeNavigation.value.loaded(new LandscapeNavigation(landscapeElements.value, levels.value.value()));
+
+      loadAnchorPointModulesMap();
+    };
+
     return {
       levels,
       isFeature,
@@ -664,6 +707,7 @@ export default defineComponent({
       canLoadMiniMap,
       selectedPresetName,
       performSearch,
+      handleRankFilter,
     };
   },
 });
