@@ -1,0 +1,14 @@
+<div class="landscape-rank-module-filter">
+  <div class="landscape-rank-module-filter--ranks">
+    <button
+      v-for="rank in ranks"
+      :key="rank"
+      class="landscape-rank-module-filter--rank"
+      :class="{ '-selected': isRankSelected(rank) }"
+      @click="toggleRank(rank)"
+      :data-testid="`rank-${rank}-filter`"
+    >
+      {{ formatRank(rank) }}
+    </button>
+  </div>
+</div>
