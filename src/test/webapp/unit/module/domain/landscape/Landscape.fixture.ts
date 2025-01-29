@@ -19,8 +19,8 @@ export const defaultLandscape = (): Landscape =>
   Landscape.initialState([
     {
       elements: [
-        initialModule('infinitest', 'Add infinitest filters', [applicationBaseNamePropertyDefinition()], []),
-        initialModule('init', 'Add some initial tools', [applicationBaseNamePropertyDefinition()], []),
+        initialModule('infinitest', 'Add infinitest filters', [applicationBaseNamePropertyDefinition()], [], 'RANK_S'),
+        initialModule('init', 'Add some initial tools', [applicationBaseNamePropertyDefinition()], [], 'RANK_S'),
         initialModule(
           'init-props',
           'Add some initial tools with extra properties',

@@ -1377,16 +1377,59 @@ describe('Landscape', () => {
 
   describe('Rank module filter', () => {
     it('should render the rank module filter', async () => {
-      const { presetComponent } = await setupRankTest();
+      const { rankComponent } = await setupRankTest();
 
-      expect(presetComponent.exists()).toBe(true);
+      expect(rankComponent.exists()).toBe(true);
+    });
+
+    it('should filter modules from selected rank', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+
+      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(wrappedElement('infinitest-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('java-base')).exists()).toBe(false);
+    });
+
+    it('should show all modules when deselect rank', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(wrappedElement('infinitest-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('java-base-module')).exists()).toBe(true);
+    });
+
+    it('should present distinctly with minimal emphasis on dependency modules of different ranks than the selected one', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+
+      const rankButton = rankComponent.find(wrappedElement('rank-RANK_D-filter'));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('init-module')).classes()).toContain('-diff-rank-minimal-emphasis');
     });
 
     const setupRankTest = async () => {
       const wrapper = await componentWithLandscape();
-      const presetComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
+      const rankComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
 
-      return { wrapper, presetComponent };
+      return { wrapper, rankComponent: rankComponent };
     };
   });
 });
