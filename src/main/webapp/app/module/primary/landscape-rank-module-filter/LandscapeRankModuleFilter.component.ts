@@ -1,11 +1,11 @@
-import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
+import { ModuleRank, RANKS } from '@/module/domain/landscape/ModuleRank';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'LandscapeRankModuleFilterVue',
   emits: ['selected'],
   setup(_, { emit }) {
-    const ranks: ModuleRank[] = ['RANK_S', 'RANK_A', 'RANK_B', 'RANK_C', 'RANK_D'];
+    const ranks = RANKS;
     const selectedRank = ref<ModuleRank | undefined>(undefined);
 
     const isRankSelected = (rank: ModuleRank): boolean => {
