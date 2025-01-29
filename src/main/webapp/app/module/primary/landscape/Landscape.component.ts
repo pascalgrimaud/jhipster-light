@@ -19,6 +19,7 @@ import { LandscapeFeatureSlug } from '@/module/domain/landscape/LandscapeFeature
 import { LandscapeLevel } from '@/module/domain/landscape/LandscapeLevel';
 import { LandscapeModule } from '@/module/domain/landscape/LandscapeModule';
 import { LandscapeSelectionElement } from '@/module/domain/landscape/LandscapeSelectionElement';
+import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
 import { IconVue } from '@/shared/icon/infrastructure/primary';
 import { Loader } from '@/shared/loader/infrastructure/primary/Loader';
@@ -46,6 +47,7 @@ export default defineComponent({
     LandscapeLoaderVue,
     LandscapeMiniMapVue,
     LandscapePresetConfigurationVue,
+    LandscapeRankModuleFilterVue,
   },
   setup() {
     const applicationListener = inject(APPLICATION_LISTENER);
