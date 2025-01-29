@@ -11,6 +11,7 @@ import { ModulesRepository } from '@/module/domain/ModulesRepository';
 import { ModulesToApply } from '@/module/domain/ModulesToApply';
 import { LandscapeVue } from '@/module/primary/landscape';
 import { LandscapePresetConfigurationVue } from '@/module/primary/landscape-preset-configuration';
+import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { BodyCursorUpdater } from '@/module/primary/landscape/BodyCursorUpdater';
 import { LandscapeScroller } from '@/module/primary/landscape/LandscapeScroller';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
@@ -1371,6 +1372,21 @@ describe('Landscape', () => {
       landscapeContainer.getBoundingClientRect = mockContainerRect;
 
       return { mockModuleRect, mockContainerRect, landscapeContainer };
+    };
+  });
+
+  describe('Rank module filter', () => {
+    it('should render the rank module filter', async () => {
+      const { presetComponent } = await setupRankTest();
+
+      expect(presetComponent.exists()).toBe(true);
+    });
+
+    const setupRankTest = async () => {
+      const wrapper = await componentWithLandscape();
+      const presetComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
+
+      return { wrapper, presetComponent };
     };
   });
 });
