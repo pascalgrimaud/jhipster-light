@@ -38,7 +38,7 @@ export const defaultLandscape = (): Landscape =>
     {
       elements: [
         new LandscapeFeature(featureSlug('client'), [
-          initialModule('vue', 'Add vue', [], moduleSlugs('init')),
+          initialModule('vue', 'Add vue', [], moduleSlugs('init'), 'RANK_S'),
           initialModule('react', 'Add react', [], moduleSlugs('init')),
           initialModule('angular', 'Add angular', [], moduleSlugs('init')),
         ]),
@@ -50,8 +50,8 @@ export const defaultLandscape = (): Landscape =>
         initialModule('java-base', 'Add base java classes', [], featureSlugs('java-build-tools')),
         initialModule('spring-boot', 'Add spring boot core', [], featureSlugs('java-build-tools')),
         new LandscapeFeature(featureSlug('ci'), [
-          initialModule('gitlab-maven', 'Add simple gitlab ci for maven', [], moduleSlugs('maven')),
-          initialModule('gitlab-gradle', 'Add simple gitlab ci for gradle', [], moduleSlugs('gradle')),
+          initialModule('gitlab-maven', 'Add simple gitlab ci for maven', [], moduleSlugs('maven'), 'RANK_S'),
+          initialModule('gitlab-gradle', 'Add simple gitlab ci for gradle', [], moduleSlugs('gradle'), 'RANK_S'),
         ]),
       ],
     },

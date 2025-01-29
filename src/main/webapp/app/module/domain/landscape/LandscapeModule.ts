@@ -51,6 +51,10 @@ export class LandscapeModule implements LandscapeElement {
     return this.information.dependencies;
   }
 
+  rank(): ModuleRank {
+    return this.information.rank;
+  }
+
   operation(): string {
     return this.information.operation;
   }
