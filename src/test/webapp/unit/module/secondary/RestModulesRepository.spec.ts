@@ -177,7 +177,7 @@ const restLandscape = (): RestLandscape => ({
     {
       elements: [
         landscapeModule('infinitest', 'Add infinitest filters', applicationBaseNameProperties(), [], 'RANK_S'),
-        landscapeModule('init', 'Add some initial tools', applicationBaseNameProperties()),
+        landscapeModule('init', 'Add some initial tools', applicationBaseNameProperties(), [], 'RANK_S'),
         landscapeModule('init-props', 'Add some initial tools with extra properties', initPropsProperties()),
         landscapeModule('prettier', 'Add prettier', applicationBaseNameProperties()),
       ],
@@ -185,7 +185,7 @@ const restLandscape = (): RestLandscape => ({
     {
       elements: [
         landscapeFeature('client', [
-          landscapeModule('vue', 'Add vue', emptyProperties(), [moduleDependency('init')]),
+          landscapeModule('vue', 'Add vue', emptyProperties(), [moduleDependency('init')], 'RANK_S'),
           landscapeModule('react', 'Add react', emptyProperties(), [moduleDependency('init')]),
           landscapeModule('angular', 'Add angular', emptyProperties(), [moduleDependency('init')]),
         ]),
