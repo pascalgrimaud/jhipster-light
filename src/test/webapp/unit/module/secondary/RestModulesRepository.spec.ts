@@ -176,7 +176,7 @@ const restLandscape = (): RestLandscape => ({
   levels: [
     {
       elements: [
-        landscapeModule('infinitest', 'Add infinitest filters', applicationBaseNameProperties()),
+        landscapeModule('infinitest', 'Add infinitest filters', applicationBaseNameProperties(), [], 'RANK_S'),
         landscapeModule('init', 'Add some initial tools', applicationBaseNameProperties()),
         landscapeModule('init-props', 'Add some initial tools with extra properties', initPropsProperties()),
         landscapeModule('prettier', 'Add prettier', applicationBaseNameProperties()),
