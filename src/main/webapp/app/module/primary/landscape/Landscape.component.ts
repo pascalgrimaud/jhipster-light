@@ -642,30 +642,17 @@ export default defineComponent({
 
     const handleRankFilter = (rank: ModuleRank | undefined): void => {
       selectedRank.value = Optional.ofNullable(rank);
-      resetToOriginalLandscape().then(() => loadRankFilteredLandscape(landscapeValue().filterByRank(selectedRank.value)));
+      reloadLandscape(originalLandscape.value.value().filterByRank(selectedRank.value)).then(() => {});
     };
 
-    const resetToOriginalLandscape = (): Promise<void> => {
-      return loadOriginalLandscape(originalLandscape.value.value());
-    };
-
-    const loadOriginalLandscape = async (response: Landscape): Promise<void> => {
-      landscape.value.loaded(response);
-      levels.value.loaded(response.standaloneLevels());
-    };
-
-    const loadRankFilteredLandscape = async (response: Landscape): Promise<void> => {
+    const reloadLandscape = async (response: Landscape): Promise<void> => {
       landscapeElements.value = new Map<string, HTMLElement>();
-
       landscape.value.loaded(response);
       levels.value.loaded(response.standaloneLevels());
 
       await nextTick();
-
       updateConnectors();
-
       landscapeNavigation.value.loaded(new LandscapeNavigation(landscapeElements.value, levels.value.value()));
-
       loadAnchorPointModulesMap();
     };
 
