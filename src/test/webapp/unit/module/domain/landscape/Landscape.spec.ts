@@ -1,6 +1,7 @@
 import { LandscapeFeature } from '@/module/domain/landscape/LandscapeFeature';
 import { LandscapeSelectionElement } from '@/module/domain/landscape/LandscapeSelectionElement';
 import { LandscapeSelectionTree } from '@/module/domain/landscape/LandscapeSelectionTree';
+import { Optional } from '@/shared/optional/domain/Optional';
 import { describe, expect, it } from 'vitest';
 import { applicationBaseNamePropertyDefinition, moduleSlug, optionalBooleanPropertyDefinition } from '../Modules.fixture';
 import { defaultLandscape, featureSlug } from './Landscape.fixture';
@@ -312,7 +313,7 @@ describe('Landscape', () => {
     it('should return same landscape when no rank filter is applied', () => {
       const landscape = defaultLandscape();
 
-      const filteredLandscape = landscape.filterByRank(undefined);
+      const filteredLandscape = landscape.filterByRank(Optional.empty());
 
       expect(filteredLandscape).toEqual(landscape);
     });
@@ -320,7 +321,7 @@ describe('Landscape', () => {
     it('should filter modules by rank', () => {
       const landscape = defaultLandscape();
 
-      const filteredLandscape = landscape.filterByRank('RANK_S');
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_S'));
 
       const levels = filteredLandscape.standaloneLevels();
       expect(levels).toHaveLength(3);
@@ -357,7 +358,7 @@ describe('Landscape', () => {
     it('should filter modules in feature keeping only modules with specified rank', () => {
       const landscape = defaultLandscape();
 
-      const filteredLandscape = landscape.filterByRank('RANK_S');
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_S'));
 
       const clientFeature = filteredLandscape
         .standaloneLevels()[1]
@@ -376,7 +377,7 @@ describe('Landscape', () => {
     it('should keep dependency modules with different ranks than the rank filter applied', () => {
       const landscape = defaultLandscape();
 
-      const filteredLandscape = landscape.filterByRank('RANK_D');
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_D'));
 
       const levels = filteredLandscape.standaloneLevels();
       const initModule = levels[0].elements[0].allModules()[0];
@@ -402,7 +403,7 @@ describe('Landscape', () => {
     it('should keep features with different ranks modules than the rank filter applied', () => {
       const landscape = defaultLandscape();
 
-      const filteredLandscape = landscape.filterByRank('RANK_D');
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_D'));
 
       const levels = filteredLandscape.standaloneLevels();
       const ciFeature = levels[2].elements[2];

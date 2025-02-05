@@ -413,10 +413,8 @@ export class Landscape {
       .orElse(false);
   }
 
-  public filterByRank(rank: ModuleRank | undefined): Landscape {
-    return Optional.ofNullable(rank)
-      .map(currentRank => this.createFilteredLandscape(currentRank))
-      .orElse(this);
+  public filterByRank(rank: Optional<ModuleRank>): Landscape {
+    return rank.map(currentRank => this.createFilteredLandscape(currentRank)).orElse(this);
   }
 
   private createFilteredLandscape(rank: ModuleRank): Landscape {

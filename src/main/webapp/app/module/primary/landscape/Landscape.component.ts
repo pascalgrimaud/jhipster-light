@@ -59,7 +59,6 @@ export default defineComponent({
     const projectFolders = inject(PROJECT_FOLDERS_REPOSITORY);
 
     const selectedMode = ref<DisplayMode>('COMPACTED');
-    const selectedRank = ref<ModuleRank | undefined>(undefined);
 
     const landscape = ref(Loader.loading<Landscape>());
     const originalLandscape = ref(Loader.loading<Landscape>());
@@ -94,6 +93,8 @@ export default defineComponent({
     const selectedPresetName = computed(() => selectedPreset.value?.name ?? '');
 
     const highlightedModule = ref<Optional<ModuleSlug>>(Optional.empty());
+
+    const selectedRank = ref<Optional<ModuleRank>>(Optional.empty());
 
     onMounted(() => {
       modules
@@ -287,14 +288,6 @@ export default defineComponent({
       await nextTick().then(updateConnectors);
     };
 
-    const diffRankMinimalEmphasisClass = (module: LandscapeElementId): string => {
-      if (!selectedRank.value || module instanceof LandscapeFeatureSlug) {
-        return '';
-      }
-
-      return landscapeValue().hasModuleDifferentRank(module as ModuleSlug, selectedRank.value) ? ' -diff-rank-minimal-emphasis' : '';
-    };
-
     const anchorPointClass = (module: LandscapeElementId): string => {
       if (module instanceof LandscapeFeatureSlug) {
         return '';
@@ -404,6 +397,17 @@ export default defineComponent({
       return highlightedModule.value
         .filter(highlighted => highlighted.get() === module.get())
         .map(() => ' -search-highlighted')
+        .orElse('');
+    };
+
+    const diffRankMinimalEmphasisClass = (module: LandscapeElementId): string => {
+      if (module instanceof LandscapeFeatureSlug) {
+        return '';
+      }
+
+      return selectedRank.value
+        .map(rank => landscapeValue().hasModuleDifferentRank(module as ModuleSlug, rank))
+        .map(hasDifferentRank => (hasDifferentRank ? ' -diff-rank-minimal-emphasis' : ''))
         .orElse('');
     };
 
@@ -637,8 +641,8 @@ export default defineComponent({
     };
 
     const handleRankFilter = (rank: ModuleRank | undefined): void => {
-      selectedRank.value = rank;
-      resetToOriginalLandscape().then(() => loadRankFilteredLandscape(landscapeValue().filterByRank(rank)));
+      selectedRank.value = Optional.ofNullable(rank);
+      resetToOriginalLandscape().then(() => loadRankFilteredLandscape(landscapeValue().filterByRank(selectedRank.value)));
     };
 
     const resetToOriginalLandscape = (): Promise<void> => {
