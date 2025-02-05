@@ -408,7 +408,7 @@ export class Landscape {
   }
 
   public hasModuleDifferentRank(module: ModuleSlug, rank: ModuleRank): boolean {
-    return Optional.ofNullable(this.modules.get(module.get()))
+    return this.getModule(module)
       .map(currentModule => currentModule.rank() !== rank)
       .orElse(false);
   }
