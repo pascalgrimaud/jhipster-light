@@ -288,6 +288,26 @@ describe('Landscape', () => {
     });
   });
 
+  describe('Has module different rank', () => {
+    it('should return false for unknown module', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('unknown'), 'RANK_S')).toBe(false);
+    });
+
+    it('should return false when module has same rank', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('init'), 'RANK_S')).toBe(false);
+    });
+
+    it('should return true when module has different rank', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('react'), 'RANK_S')).toBe(true);
+    });
+  });
+
   describe('Filter by rank', () => {
     it('should return same landscape when no rank filter is applied', () => {
       const landscape = defaultLandscape();
