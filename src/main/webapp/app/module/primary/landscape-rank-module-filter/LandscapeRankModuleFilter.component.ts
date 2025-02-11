@@ -1,4 +1,4 @@
-import { ModuleRank, RANKS } from '@/module/domain/landscape/ModuleRank';
+import { ModuleRank, RankDescription, RANKS } from '@/module/domain/landscape/ModuleRank';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
@@ -7,6 +7,14 @@ export default defineComponent({
   setup(_, { emit }) {
     const ranks = RANKS;
     const selectedRank = ref<ModuleRank | undefined>(undefined);
+
+    const rankDescriptions: RankDescription = {
+      RANK_D: 'Experimental or advanced module requiring specific expertise',
+      RANK_C: 'Module without known production usage',
+      RANK_B: 'Module with at least one confirmed production usage',
+      RANK_A: 'Module with multiple production usages across different projects and documented through talks, books or blog posts',
+      RANK_S: 'Production-proven module providing unique features, validated by community feedback (10+ endorsements)',
+    };
 
     const isRankSelected = (rank: ModuleRank): boolean => {
       return selectedRank.value === rank;
@@ -25,11 +33,16 @@ export default defineComponent({
       return rank.replace('RANK_', '');
     };
 
+    const getRankDescription = (rank: ModuleRank): string => {
+      return rankDescriptions[rank];
+    };
+
     return {
       ranks,
       isRankSelected,
       toggleRank,
       formatRank,
+      getRankDescription,
     };
   },
 });
