@@ -3,7 +3,10 @@
 @use '../../token/size';
 
 $jhlite-landscape-padding: 20px;
+$jhipster-landscape-modes-selection-top-position: $jhlite-landscape-padding;
 $jhipster-landscape-preset-selection-top-position: 85px;
+$jhipster-landscape-modes-selection-top-position-large-screen: 85px;
+$jhipster-landscape-preset-selection-top-position-large-screen: 150px;
 $jhipster-landscape-preset-selection-left-position: $jhlite-landscape-padding;
 $jhlite-landscape-line-color: colors.$jhlite-global-line-color;
 $jhlite-landscape-box-radius: colors.$jhlite-global-box-radius;
@@ -23,7 +26,7 @@ $jhlite-landscape-primary-alternative-color: colors.$jhlite-global-primary-alter
 
   .jhipster-landscape-modes-selection {
     position: absolute;
-    top: $jhlite-landscape-padding;
+    top: $jhipster-landscape-modes-selection-top-position;
     left: $jhlite-landscape-padding;
     z-index: 3;
     border: 1px dotted $jhlite-landscape-line-color;
@@ -37,6 +40,13 @@ $jhlite-landscape-primary-alternative-color: colors.$jhlite-global-primary-alter
     top: $jhipster-landscape-preset-selection-top-position;
     left: $jhipster-landscape-preset-selection-left-position;
     z-index: 3;
+    background: var(--jhlite-chip-bg-color);
+  }
+
+  .jhipster-landscape-rank-module-selection {
+    display: flex;
+    justify-content: center;
+    margin-left: $jhlite-landscape-padding;
     background: var(--jhlite-chip-bg-color);
   }
 
@@ -192,6 +202,14 @@ $jhlite-landscape-primary-alternative-color: colors.$jhlite-global-primary-alter
 
 @media screen and (min-width: breakpoint.$jhlite-global-breakpoint-small-medium) {
   .jhipster-landscape {
+    .jhipster-landscape-modes-selection {
+      top: $jhipster-landscape-modes-selection-top-position-large-screen;
+    }
+
+    .jhipster-landscape-preset-selection {
+      top: $jhipster-landscape-preset-selection-top-position-large-screen;
+    }
+
     .jhipster-landscape-content {
       display: flex;
       flex-direction: column;

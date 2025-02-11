@@ -22,15 +22,15 @@
       </div>
     </div>
   </div>
-  <div class="jhipster-landscape-rank-module-selection">
-    <LandscapeRankModuleFilterVue @selected="handleRankFilter" />
-  </div>
   <div class="jhipster-landscape-preset-selection">
     <LandscapePresetConfigurationVue :selectedPresetName="selectedPresetName" @selected="selectModulesFromPreset" />
   </div>
   <div class="jhlite-menu-content-template--content">
     <div class="jhipster-landscape-content">
       <div class="jhipster-landscape-content--header">
+        <div class="jhipster-landscape-rank-module-selection">
+          <LandscapeRankModuleFilterVue @selected="handleRankFilter" />
+        </div>
         <div class="jhipster-landscape-search-container">
           <div class="jhipster-landscape-search">
             <div class="jhlite-field--field">
