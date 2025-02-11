@@ -80,4 +80,11 @@ describe('LandscapeRankModuleFilterComponent', () => {
 
     expect(wrapper.emitted('selected')).toEqual([[RANKS[2]], [RANKS[1]]]);
   });
+
+  it('should display correct description for rank button', () => {
+    const wrapper = mount(LandscapeRankModuleFilterVue);
+
+    const rankDButton = wrapper.find(wrappedElement('rank-RANK_D-filter'));
+    expect(rankDButton.attributes('title')).toBe('Experimental or advanced module requiring specific expertise');
+  });
 });
