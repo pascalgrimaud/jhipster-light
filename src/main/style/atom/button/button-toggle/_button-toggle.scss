@@ -1,0 +1,44 @@
+@use 'sass:math';
+@use '../../../token/colors' as colors;
+@use '../../../token/color/brand' as brand;
+@use '../button-main/button-main' as button-main;
+
+$jhlite-button-toggle-padding: math.div(5, 16) * 1rem math.div(15, 16) * 1rem;
+$jhlite-button-toggle-border: 1px solid brand.$jhlite-color-brand-600;
+$jhlite-button-toggle-font-size: math.div(13, 16) * 1rem;
+$jhlite-button-toggle-hover-color-background: rgba(brand.$jhlite-color-brand-600, 0.1);
+$jhlite-button-toggle-disabled-color-background: rgba(brand.$jhlite-color-brand-600, 0.5);
+$jhlite-button-toggle-active-color-background: brand.$jhlite-color-brand-600;
+$jhlite-button-toggle-active-hover-color-background: brand.$jhlite-color-brand-700;
+
+.jhlite-button-toggle {
+  @extend %jhlite-button-main;
+
+  border: $jhlite-button-toggle-border;
+  background-color: transparent;
+  padding: $jhlite-button-toggle-padding;
+  text-transform: none;
+  color: var(--jhlite-global-color-text);
+  font-size: $jhlite-button-toggle-font-size;
+
+  &:hover {
+    background-color: $jhlite-button-toggle-hover-color-background;
+  }
+
+  &:disabled {
+    border-color: $jhlite-button-toggle-disabled-color-background;
+
+    &:hover {
+      background-color: $jhlite-button-toggle-disabled-color-background;
+    }
+  }
+
+  &.-active {
+    background-color: $jhlite-button-toggle-active-color-background;
+    color: colors.$jhlite-global-color-text-light;
+
+    &:hover {
+      background-color: $jhlite-button-toggle-active-hover-color-background;
+    }
+  }
+}
