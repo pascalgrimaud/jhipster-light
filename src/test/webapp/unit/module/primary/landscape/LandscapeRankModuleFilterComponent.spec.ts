@@ -47,7 +47,7 @@ describe('LandscapeRankModuleFilterComponent', () => {
     const rankDButton = wrapper.find(wrappedElement('rank-RANK_D-filter'));
     await rankDButton.trigger('click');
 
-    expect(rankDButton.classes()).toContain('-selected');
+    expect(rankDButton.classes()).toContain('-active');
   });
 
   it('should emit selected rank when clicking a filter button', async () => {

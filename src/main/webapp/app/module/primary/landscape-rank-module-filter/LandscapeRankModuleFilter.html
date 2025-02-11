@@ -3,8 +3,8 @@
     <button
       v-for="rank in ranks"
       :key="rank"
-      class="jhlite-button-switch"
-      :class="{ '-selected': isRankSelected(rank) }"
+      class="jhlite-button-toggle"
+      :class="{ '-active': isRankSelected(rank) }"
       @click="toggleRank(rank)"
       :data-testid="`rank-${rank}-filter`"
     >
