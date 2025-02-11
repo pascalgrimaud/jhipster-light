@@ -194,6 +194,11 @@ $jhlite-landscape-primary-alternative-color: colors.$jhlite-global-primary-alter
     border-radius: size.$jhlite-global-size-field-radius;
     box-shadow: 0 0 0 size.$jhlite-global-size-field-border-focus colors.$jhlite-attention-highlight-color;
   }
+
+  .-diff-rank-minimal-emphasis {
+    opacity: 0.5;
+    border: 1px dotted $jhlite-landscape-line-color;
+  }
 }
 
 .jhipster-landscape {
