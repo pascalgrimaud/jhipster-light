@@ -74,7 +74,6 @@ describe('LandscapeRankModuleFilterComponent', () => {
 
     const rankBButton = wrapper.find(wrappedElement('rank-RANK_B-filter'));
     const rankCButton = wrapper.find(wrappedElement('rank-RANK_C-filter'));
-
     await rankBButton.trigger('click');
     await rankCButton.trigger('click');
 
@@ -85,6 +84,7 @@ describe('LandscapeRankModuleFilterComponent', () => {
     const wrapper = mount(LandscapeRankModuleFilterVue);
 
     const rankDButton = wrapper.find(wrappedElement('rank-RANK_D-filter'));
+
     expect(rankDButton.attributes('title')).toBe('Experimental or advanced module requiring specific expertise');
   });
 });
