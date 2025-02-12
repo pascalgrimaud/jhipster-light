@@ -1,4 +1,6 @@
-import { ModuleRank, RankDescription, RANKS } from '@/module/domain/landscape/ModuleRank';
+import type { ModuleRank } from '@/module/domain/landscape/ModuleRank';
+import { RANKS } from '@/module/domain/landscape/ModuleRank';
+import type { RankDescription } from '@/module/domain/RankDescription';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
