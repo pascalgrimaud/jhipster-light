@@ -1,12 +1,19 @@
 import type { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { RANKS } from '@/module/domain/landscape/ModuleRank';
 import type { RankDescription } from '@/module/domain/RankDescription';
-import { defineComponent, ref } from 'vue';
+import type { RanksUsed } from '@/module/domain/RanksUsed';
+import { defineComponent, PropType, ref } from 'vue';
 
 export default defineComponent({
   name: 'LandscapeRankModuleFilterVue',
+  props: {
+    ranksUsed: {
+      type: Array as PropType<RanksUsed>,
+      required: true,
+    },
+  },
   emits: ['selected'],
-  setup(_, { emit }) {
+  setup(props, { emit }) {
     const ranks = RANKS;
     const selectedRank = ref<ModuleRank | undefined>(undefined);
 
@@ -39,12 +46,18 @@ export default defineComponent({
       return rankDescriptions[rank];
     };
 
+    const isRankDisabled = (rank: ModuleRank): boolean => {
+      const rankUsed = props.ranksUsed.find(ru => ru.rank === rank);
+      return rankUsed?.quantity === 0;
+    };
+
     return {
       ranks,
       isRankSelected,
       toggleRank,
       formatRank,
       getRankDescription,
+      isRankDisabled,
     };
   },
 });

@@ -8,6 +8,7 @@
       @click="toggleRank(rank)"
       :data-testid="`rank-${rank}-filter`"
       :title="getRankDescription(rank)"
+      :disabled="isRankDisabled(rank)"
     >
       {{ formatRank(rank) }}
     </button>
