@@ -654,14 +654,20 @@ export default defineComponent({
     };
 
     const reloadLandscape = async (response: Landscape): Promise<void> => {
-      landscapeElements.value = new Map<string, HTMLElement>();
       landscape.value.loaded(response);
       levels.value.loaded(response.standaloneLevels());
 
-      await nextTick();
-      updateConnectors();
+      await rebuildLandscapeElements();
+
+      await nextTick().then(updateConnectors);
       landscapeNavigation.value.loaded(new LandscapeNavigation(landscapeElements.value, levels.value.value()));
       loadAnchorPointModulesMap();
+    };
+
+    const rebuildLandscapeElements = async (): Promise<void> => {
+      // Wait for DOM update before clearing and rebuilding refs
+      await nextTick();
+      landscapeElements.value = new Map<string, HTMLElement>();
     };
 
     return {
