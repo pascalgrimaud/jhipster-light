@@ -1393,7 +1393,8 @@ describe('Landscape', () => {
       expect(wrapper.find(wrappedElement('infinitest-module')).exists()).toBe(true);
       expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
       expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('java-base')).exists()).toBe(false);
+      expect(wrapper.find(wrappedElement('java-base-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(false);
     });
 
     it('should show all modules when deselect rank', async () => {
@@ -1411,6 +1412,7 @@ describe('Landscape', () => {
       expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
       expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
       expect(wrapper.find(wrappedElement('java-base-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(true);
     });
 
     it('should present distinctly with minimal emphasis on dependency modules of different ranks than the selected one', async () => {

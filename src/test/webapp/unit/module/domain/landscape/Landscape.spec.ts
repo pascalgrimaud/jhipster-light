@@ -405,8 +405,9 @@ describe('Landscape', () => {
 
       const filteredLandscape = landscape.filterByRank(Optional.of('RANK_D'));
 
-      const levels = filteredLandscape.standaloneLevels();
-      const ciFeature = levels[2].elements[2];
+      const ciFeature = filteredLandscape
+        .standaloneLevels()[2]
+        .elements.find(element => element instanceof LandscapeFeature && element.slugString() === 'ci');
       expect(ciFeature).toEqual(
         expect.objectContaining({
           featureSlug: featureSlug('ci'),

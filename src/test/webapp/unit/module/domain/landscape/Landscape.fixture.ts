@@ -47,7 +47,7 @@ export const defaultLandscape = (): Landscape =>
     },
     {
       elements: [
-        initialModule('java-base', 'Add base java classes', [], featureSlugs('java-build-tools')),
+        initialModule('java-base', 'Add base java classes', [], featureSlugs('java-build-tools'), 'RANK_S'),
         initialModule('spring-boot', 'Add spring boot core', [], featureSlugs('java-build-tools')),
         new LandscapeFeature(featureSlug('ci'), [
           initialModule('gitlab-maven', 'Add simple gitlab ci for maven', [], moduleSlugs('maven'), 'RANK_S'),
