@@ -11,10 +11,11 @@ export const toModuleRankStatistics = (landscape: Landscape): ModuleRankStatisti
     .standaloneLevels()
     .flatMap(level => level.elements)
     .flatMap(element => element.allModules())
-    .forEach(module => {
-      const currentCount = rankCounts.get(module.rank()) || 0;
-      rankCounts.set(module.rank(), currentCount + 1);
-    });
+    .reduce((counts, module) => {
+      const currentCount = counts.get(module.rank()) || 0;
+      counts.set(module.rank(), currentCount + 1);
+      return counts;
+    }, rankCounts);
 
   return RANKS.map(rank => ({
     rank,
