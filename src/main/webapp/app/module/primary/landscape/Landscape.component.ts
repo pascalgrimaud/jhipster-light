@@ -8,11 +8,11 @@ import {
 import { AnchorPointState } from '@/module/domain/AnchorPointState';
 import { ModuleParameter } from '@/module/domain/ModuleParameter';
 import { ModulePropertyDefinition } from '@/module/domain/ModulePropertyDefinition';
+import type { ModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
+import { toModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import { Preset } from '@/module/domain/Preset';
 import { ProjectHistory } from '@/module/domain/ProjectHistory';
-import type { RanksUsed } from '@/module/domain/RanksUsed';
-import { toRanksUsed } from '@/module/domain/RanksUsed';
 import { Landscape } from '@/module/domain/landscape/Landscape';
 import { LandscapeElement } from '@/module/domain/landscape/LandscapeElement';
 import { LandscapeElementId } from '@/module/domain/landscape/LandscapeElementId';
@@ -97,7 +97,7 @@ export default defineComponent({
     const highlightedModule = ref<Optional<ModuleSlug>>(Optional.empty());
 
     const selectedRank = ref<Optional<ModuleRank>>(Optional.empty());
-    const ranksUsed = ref<RanksUsed>([]);
+    const moduleRankStatistics = ref<ModuleRankStatistics>([]);
 
     onMounted(() => {
       modules
@@ -191,7 +191,7 @@ export default defineComponent({
     };
 
     const loadLandscapeRankModuleFilterProperty = (): void => {
-      ranksUsed.value = toRanksUsed(landscapeValue());
+      moduleRankStatistics.value = toModuleRankStatistics(landscapeValue());
     };
 
     type Navigation = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown' | 'Space';
@@ -707,7 +707,7 @@ export default defineComponent({
       selectedPresetName,
       performSearch,
       handleRankFilter,
-      ranksUsed,
+      moduleRankStatistics,
     };
   },
 });

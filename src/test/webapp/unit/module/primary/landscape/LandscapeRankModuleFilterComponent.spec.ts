@@ -1,23 +1,15 @@
 import { RANKS } from '@/module/domain/landscape/ModuleRank';
-import { RanksUsed, toRanksUsed } from '@/module/domain/RanksUsed';
+import { ModuleRankStatistics, toModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
 import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { mount, VueWrapper } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { wrappedElement } from '../../../WrappedElement';
 import { defaultLandscape } from '../../domain/landscape/Landscape.fixture';
 
-// const wrap = (): VueWrapper => {
-//   return mount(LandscapeRankModuleFilterVue, {
-//     props: {
-//       ranksUsed: toRanksUsed(defaultLandscape()),
-//     },
-//   });
-// };
-
-const wrap = (props?: { ranksUsed: RanksUsed }): VueWrapper => {
+const wrap = (props?: { moduleRankStatistics: ModuleRankStatistics }): VueWrapper => {
   return mount(LandscapeRankModuleFilterVue, {
     props: props || {
-      ranksUsed: RANKS.map(rank => ({ rank, quantity: 1 })), // Force enable all ranks
+      moduleRankStatistics: RANKS.map(rank => ({ rank, quantity: 1 })), // Force enable all ranks
     },
   });
 };
@@ -107,7 +99,8 @@ describe('LandscapeRankModuleFilterComponent', () => {
   });
 
   it('should disable rank button without module rank associated', () => {
-    const wrapper = wrap({ ranksUsed: toRanksUsed(defaultLandscape()) });
+    const moduleRankStatistics = toModuleRankStatistics(defaultLandscape());
+    const wrapper = wrap({ moduleRankStatistics });
 
     const rankSButton = wrapper.find(wrappedElement('rank-RANK_S-filter'));
     const rankAButton = wrapper.find(wrappedElement('rank-RANK_A-filter'));

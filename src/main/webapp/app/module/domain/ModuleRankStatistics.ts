@@ -1,10 +1,10 @@
-import { RankUsed } from '@/module/domain/RankUsed';
+import { ModuleRankCount } from '@/module/domain/ModuleRankCount';
 import { Landscape } from '@/module/domain/landscape/Landscape';
 import { ModuleRank, RANKS } from '@/module/domain/landscape/ModuleRank';
 
-export type RanksUsed = RankUsed[];
+export type ModuleRankStatistics = ModuleRankCount[];
 
-export const toRanksUsed = (landscape: Landscape): RanksUsed => {
+export const toModuleRankStatistics = (landscape: Landscape): ModuleRankStatistics => {
   const rankCounts = new Map<ModuleRank, number>(RANKS.map(rank => [rank, 0]));
 
   landscape
