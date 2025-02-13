@@ -6,10 +6,10 @@
 $jhlite-button-toggle-padding: math.div(5, 16) * 1rem math.div(15, 16) * 1rem;
 $jhlite-button-toggle-border: 1px solid brand.$jhlite-color-brand-600;
 $jhlite-button-toggle-font-size: math.div(13, 16) * 1rem;
-$jhlite-button-toggle-hover-color-background: rgba(brand.$jhlite-color-brand-600, 0.1);
-$jhlite-button-toggle-disabled-color-background: rgba(brand.$jhlite-color-brand-600, 0.5);
-$jhlite-button-toggle-active-color-background: brand.$jhlite-color-brand-600;
-$jhlite-button-toggle-active-hover-color-background: brand.$jhlite-color-brand-700;
+$jhlite-button-toggle-hover-color-background: rgba(button-main.$jhlite-button-color-background, 0.1);
+$jhlite-button-toggle-disabled-color-background: button-main.$jhlite-button-disabled-color-background;
+$jhlite-button-toggle-active-color-background: button-main.$jhlite-button-color-background;
+$jhlite-button-toggle-active-hover-color-background: button-main.$jhlite-button-hover-color-background;
 
 .jhlite-button-toggle {
   @extend %jhlite-button-main;
@@ -26,8 +26,6 @@ $jhlite-button-toggle-active-hover-color-background: brand.$jhlite-color-brand-7
   }
 
   &:disabled {
-    border-color: $jhlite-button-toggle-disabled-color-background;
-
     &:hover {
       background-color: $jhlite-button-toggle-disabled-color-background;
     }
