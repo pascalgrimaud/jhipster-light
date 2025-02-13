@@ -11,6 +11,8 @@ import { ModulePropertyDefinition } from '@/module/domain/ModulePropertyDefiniti
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import { Preset } from '@/module/domain/Preset';
 import { ProjectHistory } from '@/module/domain/ProjectHistory';
+import type { RanksUsed } from '@/module/domain/RanksUsed';
+import { toRanksUsed } from '@/module/domain/RanksUsed';
 import { Landscape } from '@/module/domain/landscape/Landscape';
 import { LandscapeElement } from '@/module/domain/landscape/LandscapeElement';
 import { LandscapeElementId } from '@/module/domain/landscape/LandscapeElementId';
@@ -95,6 +97,7 @@ export default defineComponent({
     const highlightedModule = ref<Optional<ModuleSlug>>(Optional.empty());
 
     const selectedRank = ref<Optional<ModuleRank>>(Optional.empty());
+    const ranksUsed = ref<RanksUsed>([]);
 
     onMounted(() => {
       modules
@@ -160,6 +163,7 @@ export default defineComponent({
 
       canLoadMiniMap.value = true;
       loadAnchorPointModulesMap();
+      loadLandscapeRankModuleFilterProperty();
     };
 
     const loadAnchorPointModulesMap = (): void => {
@@ -184,6 +188,10 @@ export default defineComponent({
           anchorPointModulesMap.value.set(endingElementSlug, { atStart: endingElementSlugExists.atStart, atEnd: true });
         }
       });
+    };
+
+    const loadLandscapeRankModuleFilterProperty = (): void => {
+      ranksUsed.value = toRanksUsed(landscapeValue());
     };
 
     type Navigation = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown' | 'Space';
@@ -699,6 +707,7 @@ export default defineComponent({
       selectedPresetName,
       performSearch,
       handleRankFilter,
+      ranksUsed,
     };
   },
 });
