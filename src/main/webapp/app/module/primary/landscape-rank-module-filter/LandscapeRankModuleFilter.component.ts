@@ -47,8 +47,7 @@ export default defineComponent({
     };
 
     const isRankDisabled = (rank: ModuleRank): boolean => {
-      const moduleRankStatistics = props.moduleRankStatistics.find(ru => ru.rank === rank);
-      return moduleRankStatistics?.quantity === 0;
+      return props.moduleRankStatistics.find(ru => ru.rank === rank)?.quantity === 0;
     };
 
     return {
