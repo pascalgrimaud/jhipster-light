@@ -1180,6 +1180,19 @@ describe('Landscape', () => {
       expect(presetDropdown.element.value).toBe('');
     });
 
+    it('should deselect preset option when a rank button is clicked', async () => {
+      const { wrapper, presetComponent } = await setupAndSelectPreset('init-maven');
+      const rankComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
+
+      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      const presetDropdown = presetComponent.find('select');
+      expect(presetDropdown.element.value).toBe('');
+    });
+
     const setupAndSelectPreset = async (presetValue: string) => {
       const { wrapper, presetComponent } = await setupPresetTest();
 
