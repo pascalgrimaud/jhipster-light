@@ -11,7 +11,7 @@ export const toModuleRankStatistics = (landscape: Landscape): ModuleRankStatisti
     .flatMap(element => element.allModules())
     .reduce(
       (counts, module) => {
-        const currentCount = counts.get(module.rank()) || 0;
+        const currentCount = counts.get(module.rank())!;
         counts.set(module.rank(), currentCount + 1);
         return counts;
       },
@@ -20,6 +20,6 @@ export const toModuleRankStatistics = (landscape: Landscape): ModuleRankStatisti
 
   return RANKS.map(rank => ({
     rank,
-    quantity: rankCounts.get(rank) ?? 0,
+    quantity: rankCounts.get(rank)!,
   }));
 };
