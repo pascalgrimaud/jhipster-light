@@ -20,6 +20,6 @@ export const toModuleRankStatistics = (landscape: Landscape): ModuleRankStatisti
 
   return RANKS.map(rank => ({
     rank,
-    quantity: rankCounts.get(rank) || 0,
+    quantity: rankCounts.get(rank) ?? 0,
   }));
 };
