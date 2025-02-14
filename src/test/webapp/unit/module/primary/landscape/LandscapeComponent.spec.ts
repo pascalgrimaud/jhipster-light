@@ -1405,8 +1405,8 @@ describe('Landscape', () => {
         init: true,
         vue: true,
         'java-base': true,
-        'spring-boot': false,
       });
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(false);
     });
 
     it('should show all modules when deselect rank', async () => {
@@ -1420,8 +1420,8 @@ describe('Landscape', () => {
         init: true,
         vue: true,
         'java-base': true,
-        'spring-boot': true,
       });
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(true);
     });
 
     it('should present distinctly with minimal emphasis on dependency modules of different ranks than the selected one', async () => {
