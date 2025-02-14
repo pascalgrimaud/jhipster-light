@@ -290,19 +290,19 @@ describe('Landscape', () => {
   });
 
   describe('Has module different rank', () => {
-    it('should return false for unknown module', () => {
+    it('should not detect different ranks when checking an unknown module', () => {
       const landscape = defaultLandscape();
 
       expect(landscape.hasModuleDifferentRank(moduleSlug('unknown'), 'RANK_S')).toBe(false);
     });
 
-    it('should return false when module has same rank', () => {
+    it('should not detect different ranks when module has same rank as checked', () => {
       const landscape = defaultLandscape();
 
       expect(landscape.hasModuleDifferentRank(moduleSlug('init'), 'RANK_S')).toBe(false);
     });
 
-    it('should return true when module has different rank', () => {
+    it('should detect different ranks when module has different rank from checked', () => {
       const landscape = defaultLandscape();
 
       expect(landscape.hasModuleDifferentRank(moduleSlug('react'), 'RANK_S')).toBe(true);
