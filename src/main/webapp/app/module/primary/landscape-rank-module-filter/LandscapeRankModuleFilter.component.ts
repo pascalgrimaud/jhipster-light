@@ -2,7 +2,7 @@ import type { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { RANKS } from '@/module/domain/landscape/ModuleRank';
 import type { ModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
 import type { RankDescription } from '@/module/domain/RankDescription';
-import { defineComponent, PropType, ref } from 'vue';
+import { PropType, defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'LandscapeRankModuleFilterVue',

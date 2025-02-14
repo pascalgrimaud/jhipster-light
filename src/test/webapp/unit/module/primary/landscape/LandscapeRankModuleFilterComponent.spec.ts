@@ -1,7 +1,7 @@
 import { RANKS } from '@/module/domain/landscape/ModuleRank';
 import { ModuleRankStatistics, toModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
 import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
-import { mount, VueWrapper } from '@vue/test-utils';
+import { VueWrapper, mount } from '@vue/test-utils';
 import { describe, expect, it } from 'vitest';
 import { wrappedElement } from '../../../WrappedElement';
 import { defaultLandscape } from '../../domain/landscape/Landscape.fixture';
