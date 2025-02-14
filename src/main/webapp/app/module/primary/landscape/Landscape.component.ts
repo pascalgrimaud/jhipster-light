@@ -649,6 +649,8 @@ export default defineComponent({
     };
 
     const handleRankFilter = (rank: ModuleRank | undefined): void => {
+      clearPresetSelection();
+
       selectedRank.value = Optional.ofNullable(rank);
       reloadLandscape(originalLandscape.value.value().filterByRank(selectedRank.value)).then(() => {});
     };
