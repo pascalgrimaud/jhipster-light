@@ -414,7 +414,7 @@ export default defineComponent({
       }
 
       return selectedRank.value
-        .map(rank => landscapeValue().hasModuleDifferentRank(module as ModuleSlug, rank))
+        .map(rank => landscapeValue().hasModuleDifferentRank(module, rank))
         .map(hasDifferentRank => (hasDifferentRank ? ' -diff-rank-minimal-emphasis' : ''))
         .orElse('');
     };
