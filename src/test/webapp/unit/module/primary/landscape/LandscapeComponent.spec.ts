@@ -1398,43 +1398,36 @@ describe('Landscape', () => {
     it('should filter modules from selected rank', async () => {
       const { wrapper, rankComponent } = await setupRankTest();
 
-      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
-      await rankButton.trigger('click');
-      await flushPromises();
-      await wrapper.vm.$nextTick();
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
 
-      expect(wrapper.find(wrappedElement('infinitest-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('java-base-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(false);
+      await expectModulesVisibility(wrapper, {
+        infinitest: true,
+        init: true,
+        vue: true,
+        'java-base': true,
+        'spring-boot': false,
+      });
     });
 
     it('should show all modules when deselect rank', async () => {
       const { wrapper, rankComponent } = await setupRankTest();
-      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
-      await rankButton.trigger('click');
-      await flushPromises();
-      await wrapper.vm.$nextTick();
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
 
-      await rankButton.trigger('click');
-      await flushPromises();
-      await wrapper.vm.$nextTick();
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
 
-      expect(wrapper.find(wrappedElement('infinitest-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('vue-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('java-base-module')).exists()).toBe(true);
-      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(true);
+      await expectModulesVisibility(wrapper, {
+        infinitest: true,
+        init: true,
+        vue: true,
+        'java-base': true,
+        'spring-boot': true,
+      });
     });
 
     it('should present distinctly with minimal emphasis on dependency modules of different ranks than the selected one', async () => {
       const { wrapper, rankComponent } = await setupRankTest();
 
-      const rankButton = rankComponent.find(wrappedElement('rank-RANK_D-filter'));
-      await rankButton.trigger('click');
-      await flushPromises();
-      await wrapper.vm.$nextTick();
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_D');
 
       expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
       expect(wrapper.find(wrappedElement('init-module')).classes()).toContain('-diff-rank-minimal-emphasis');
@@ -1444,7 +1437,23 @@ describe('Landscape', () => {
       const wrapper = await componentWithLandscape();
       const rankComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
 
-      return { wrapper, rankComponent: rankComponent };
+      return { wrapper, rankComponent };
+    };
+
+    const triggerRankFilter = async (wrapper: VueWrapper, rankComponent: VueWrapper, rank: string): Promise<void> => {
+      const rankButton = rankComponent.find(wrappedElement(`rank-${rank}-filter`));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+    };
+
+    const expectModulesVisibility = async (wrapper: VueWrapper, expectations: Record<string, boolean>) => {
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      Object.entries(expectations).forEach(([module, shouldExist]) => {
+        expect(wrapper.find(wrappedElement(`${module}-module`)).exists()).toBe(shouldExist);
+      });
     };
   });
 });
