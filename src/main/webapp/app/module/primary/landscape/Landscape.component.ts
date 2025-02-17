@@ -652,7 +652,7 @@ export default defineComponent({
       clearPresetSelection();
 
       selectedRank.value = Optional.ofNullable(rank);
-      reloadLandscape(originalLandscape.value.value().filterByRank(selectedRank.value)).then(() => {});
+      void reloadLandscape(originalLandscape.value.value().filterByRank(selectedRank.value));
     };
 
     const reloadLandscape = async (response: Landscape): Promise<void> => {
