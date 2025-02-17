@@ -25,9 +25,7 @@ export default defineComponent({
       RANK_S: 'Production-proven module providing unique features, validated by community feedback (10+ endorsements)',
     };
 
-    const isRankSelected = (rank: ModuleRank): boolean => {
-      return selectedRank.value === rank;
-    };
+    const isRankSelected = (rank: ModuleRank): boolean => selectedRank.value === rank;
 
     const toggleRank = (rank: ModuleRank): void => {
       if (selectedRank.value === rank) {
@@ -38,17 +36,11 @@ export default defineComponent({
       emit('selected', selectedRank.value);
     };
 
-    const formatRank = (rank: ModuleRank): string => {
-      return rank.replace('RANK_', '');
-    };
+    const formatRank = (rank: ModuleRank): string => rank.replace('RANK_', '');
 
-    const getRankDescription = (rank: ModuleRank): string => {
-      return rankDescriptions[rank];
-    };
+    const getRankDescription = (rank: ModuleRank): string => rankDescriptions[rank];
 
-    const isRankDisabled = (rank: ModuleRank): boolean => {
-      return props.moduleRankStatistics.find(ru => ru.rank === rank)?.quantity === 0;
-    };
+    const isRankDisabled = (rank: ModuleRank): boolean => props.moduleRankStatistics.find(ru => ru.rank === rank)?.quantity === 0;
 
     return {
       ranks,
