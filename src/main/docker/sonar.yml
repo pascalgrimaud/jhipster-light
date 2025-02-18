@@ -1,7 +1,7 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
 services:
   sonar:
-    image: sonarqube:10.7.0-community
+    image: sonarqube:25.2.0.102705-community
     container_name: sonar
     # Authentication is turned off for out of the box experience while trying out SonarQube
     # For real use cases delete sonar.forceAuthentication variable or set sonar.forceAuthentication=true
