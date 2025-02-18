@@ -20,7 +20,15 @@ class ReactJwtModuleFactoryTest {
   void shouldBuildModule() {
     JHipsterModule module = factory.buildModule(properties());
 
-    JHipsterModuleAsserter asserter = assertThatModuleWithFiles(module, packageJsonFile(), app(), appCss(), indexTsx(), indexCss());
+    JHipsterModuleAsserter asserter = assertThatModuleWithFiles(
+      module,
+      packageJsonFile(),
+      app(),
+      appCss(),
+      indexTsx(),
+      indexCss(),
+      viteReactConfigFile()
+    );
 
     assertReactApp(asserter);
     asserter
@@ -71,7 +79,7 @@ class ReactJwtModuleFactoryTest {
     asserter
       .hasFile("package.json")
       .containing(nodeDependency("autoprefixer"))
-      .containing(nodeDependency("postcss"))
+      .containing(nodeDependency("@tailwindcss/vite"))
       .containing(nodeDependency("tailwindcss"))
       .containing(nodeDependency("react-hook-form"))
       .containing(nodeDependency("axios"))
