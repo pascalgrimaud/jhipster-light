@@ -1,0 +1,10 @@
+[
+  {
+    "name": "tech.jhipster.lite.module.infrastructure.secondary.PersistedPresets",
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "tech.jhipster.lite.module.infrastructure.secondary.PersistedPreset",
+    "allDeclaredConstructors": true
+  }
+]
