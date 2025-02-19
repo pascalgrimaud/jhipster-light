@@ -1,3 +1,4 @@
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { ModulePropertyDefinition } from '../ModulePropertyDefinition';
 import { ModuleSlug } from '../ModuleSlug';
 import { LandscapeElement } from './LandscapeElement';
@@ -11,6 +12,7 @@ export interface LandscapeModuleInformation {
   operation: ModuleOperation;
   properties: ModulePropertyDefinition[];
   dependencies: LandscapeElementId[];
+  rank: ModuleRank;
 }
 
 export interface LandscapeModuleContext {
@@ -47,6 +49,10 @@ export class LandscapeModule implements LandscapeElement {
 
   dependencies(): LandscapeElementId[] {
     return this.information.dependencies;
+  }
+
+  rank(): ModuleRank {
+    return this.information.rank;
   }
 
   operation(): string {

@@ -3,6 +3,7 @@ import { LandscapeElementId } from '@/module/domain/landscape/LandscapeElementId
 import { LandscapeFeature } from '@/module/domain/landscape/LandscapeFeature';
 import { LandscapeFeatureSlug } from '@/module/domain/landscape/LandscapeFeatureSlug';
 import { LandscapeModule } from '@/module/domain/landscape/LandscapeModule';
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
 import { ModulePropertyDefinition } from '@/module/domain/ModulePropertyDefinition';
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import {
@@ -18,8 +19,8 @@ export const defaultLandscape = (): Landscape =>
   Landscape.initialState([
     {
       elements: [
-        initialModule('infinitest', 'Add infinitest filters', [applicationBaseNamePropertyDefinition()], []),
-        initialModule('init', 'Add some initial tools', [applicationBaseNamePropertyDefinition()], []),
+        initialModule('infinitest', 'Add infinitest filters', [applicationBaseNamePropertyDefinition()], [], 'RANK_S'),
+        initialModule('init', 'Add some initial tools', [applicationBaseNamePropertyDefinition()], [], 'RANK_S'),
         initialModule(
           'init-props',
           'Add some initial tools with extra properties',
@@ -37,7 +38,7 @@ export const defaultLandscape = (): Landscape =>
     {
       elements: [
         new LandscapeFeature(featureSlug('client'), [
-          initialModule('vue', 'Add vue', [], moduleSlugs('init')),
+          initialModule('vue', 'Add vue', [], moduleSlugs('init'), 'RANK_S'),
           initialModule('react', 'Add react', [], moduleSlugs('init')),
           initialModule('angular', 'Add angular', [], moduleSlugs('init')),
         ]),
@@ -46,11 +47,11 @@ export const defaultLandscape = (): Landscape =>
     },
     {
       elements: [
-        initialModule('java-base', 'Add base java classes', [], featureSlugs('java-build-tools')),
+        initialModule('java-base', 'Add base java classes', [], featureSlugs('java-build-tools'), 'RANK_S'),
         initialModule('spring-boot', 'Add spring boot core', [], featureSlugs('java-build-tools')),
         new LandscapeFeature(featureSlug('ci'), [
-          initialModule('gitlab-maven', 'Add simple gitlab ci for maven', [], moduleSlugs('maven')),
-          initialModule('gitlab-gradle', 'Add simple gitlab ci for gradle', [], moduleSlugs('gradle')),
+          initialModule('gitlab-maven', 'Add simple gitlab ci for maven', [], moduleSlugs('maven'), 'RANK_S'),
+          initialModule('gitlab-gradle', 'Add simple gitlab ci for gradle', [], moduleSlugs('gradle'), 'RANK_S'),
         ]),
       ],
     },
@@ -84,12 +85,14 @@ const initialModule = (
   operation: string,
   properties: ModulePropertyDefinition[],
   dependencies: LandscapeElementId[],
+  rank: ModuleRank = 'RANK_D',
 ): LandscapeModule =>
   LandscapeModule.initialState({
     slug: moduleSlug(slug),
     operation,
     properties,
     dependencies,
+    rank,
   });
 
 const featureSlugs = (...slugs: string[]): LandscapeFeatureSlug[] => slugs.map(featureSlug);

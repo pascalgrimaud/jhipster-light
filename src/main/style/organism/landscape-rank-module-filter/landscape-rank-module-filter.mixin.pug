@@ -1,0 +1,10 @@
+include /atom/button/button-toggle/button-toggle.mixin.pug
+
+mixin jhlite-landscape-rank-module-filter
+  .jhlite-landscape-rank-module-filter
+    .jhlite-landscape-rank-module-filter--ranks
+      +jhlite-button-toggle D
+      +jhlite-button-toggle({ disabled: true }) C
+      +jhlite-button-toggle({ disabled: true }) B
+      +jhlite-button-toggle({ disabled: true }) A
+      +jhlite-button-toggle({ active: true }) S

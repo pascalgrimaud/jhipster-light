@@ -1,5 +1,7 @@
+import { LandscapeFeature } from '@/module/domain/landscape/LandscapeFeature';
 import { LandscapeSelectionElement } from '@/module/domain/landscape/LandscapeSelectionElement';
 import { LandscapeSelectionTree } from '@/module/domain/landscape/LandscapeSelectionTree';
+import { Optional } from '@/shared/optional/domain/Optional';
 import { describe, expect, it } from 'vitest';
 import { applicationBaseNamePropertyDefinition, moduleSlug, optionalBooleanPropertyDefinition } from '../Modules.fixture';
 import { defaultLandscape, featureSlug } from './Landscape.fixture';
@@ -284,6 +286,133 @@ describe('Landscape', () => {
         .selectedModulesProperties();
 
       expect(properties).toEqual([applicationBaseNamePropertyDefinition(), optionalBooleanPropertyDefinition()]);
+    });
+  });
+
+  describe('Has module different rank', () => {
+    it('should not detect different ranks when checking an unknown module', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('unknown'), 'RANK_S')).toBe(false);
+    });
+
+    it('should not detect different ranks when module has same rank as checked', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('init'), 'RANK_S')).toBe(false);
+    });
+
+    it('should detect different ranks when module has different rank from checked', () => {
+      const landscape = defaultLandscape();
+
+      expect(landscape.hasModuleDifferentRank(moduleSlug('react'), 'RANK_S')).toBe(true);
+    });
+  });
+
+  describe('Filter by rank', () => {
+    it('should return same landscape when no rank filter is applied', () => {
+      const landscape = defaultLandscape();
+
+      const filteredLandscape = landscape.filterByRank(Optional.empty());
+
+      expect(filteredLandscape).toEqual(landscape);
+    });
+
+    it('should filter modules by rank', () => {
+      const landscape = defaultLandscape();
+
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_S'));
+
+      const levels = filteredLandscape.standaloneLevels();
+      expect(levels).toHaveLength(3);
+      const rootModules = levels[0].elements.flatMap(element => element.allModules());
+      expect(rootModules).toHaveLength(2);
+      expect(rootModules).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            information: expect.objectContaining({
+              slug: moduleSlug('infinitest'),
+              rank: 'RANK_S',
+            }),
+          }),
+          expect.objectContaining({
+            information: expect.objectContaining({
+              slug: moduleSlug('init'),
+              rank: 'RANK_S',
+            }),
+          }),
+        ]),
+      );
+      const clientFeatureModules = levels[1].elements[0].allModules();
+      expect(clientFeatureModules).toHaveLength(1);
+      expect(clientFeatureModules[0]).toEqual(
+        expect.objectContaining({
+          information: expect.objectContaining({
+            slug: moduleSlug('vue'),
+            rank: 'RANK_S',
+          }),
+        }),
+      );
+    });
+
+    it('should filter modules in feature keeping only modules with specified rank', () => {
+      const landscape = defaultLandscape();
+
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_S'));
+
+      const clientFeature = filteredLandscape
+        .standaloneLevels()[1]
+        .elements.find(element => element instanceof LandscapeFeature && element.slugString() === 'client');
+      expect(clientFeature).toBeDefined();
+      expect(clientFeature?.allModules()).toEqual([
+        expect.objectContaining({
+          information: expect.objectContaining({
+            slug: moduleSlug('vue'),
+            rank: 'RANK_S',
+          }),
+        }),
+      ]);
+    });
+
+    it('should keep dependency modules with different ranks than the rank filter applied', () => {
+      const landscape = defaultLandscape();
+
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_D'));
+
+      const levels = filteredLandscape.standaloneLevels();
+      const initModule = levels[0].elements[0].allModules()[0];
+      expect(initModule).toEqual(
+        expect.objectContaining({
+          information: expect.objectContaining({
+            slug: moduleSlug('init'),
+            rank: 'RANK_S',
+          }),
+        }),
+      );
+      const reactModule = levels[1].elements[0].allModules()[0];
+      expect(reactModule).toEqual(
+        expect.objectContaining({
+          information: expect.objectContaining({
+            slug: moduleSlug('react'),
+            rank: 'RANK_D',
+          }),
+        }),
+      );
+    });
+
+    it('should keep features with different ranks modules than the rank filter applied', () => {
+      const landscape = defaultLandscape();
+
+      const filteredLandscape = landscape.filterByRank(Optional.of('RANK_D'));
+
+      const ciFeature = filteredLandscape
+        .standaloneLevels()[2]
+        .elements.find(element => element instanceof LandscapeFeature && element.slugString() === 'ci');
+      expect(ciFeature).toEqual(
+        expect.objectContaining({
+          featureSlug: featureSlug('ci'),
+        }),
+      );
     });
   });
 });
