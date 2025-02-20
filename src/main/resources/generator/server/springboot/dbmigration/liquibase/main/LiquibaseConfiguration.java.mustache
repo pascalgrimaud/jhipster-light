@@ -83,8 +83,7 @@ class LiquibaseConfiguration {
     liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
     liquibase.setShouldRun(liquibaseProperties.isEnabled());
 
-    // https://github.com/liquibase/liquibase/issues/6501#issuecomment-2464909449
-    System.setProperty("liquibase.analytics.enabled", "false");
+    liquibase.setAnalyticsEnabled(false);
 
     return liquibase;
   }
