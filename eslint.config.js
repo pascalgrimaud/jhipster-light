@@ -40,23 +40,11 @@ export default typescript.config(
     },
   },
   {
-    files: ['src/test/webapp/component/integration/**/*.ts'],
+    files: ['src/test/webapp/{component,e2e}/integration/**/*.ts'],
     extends: [...typescript.configs.recommendedTypeChecked, cypress.configs.recommended],
     languageOptions: {
       parserOptions: {
-        project: ['src/test/webapp/component/tsconfig.json'],
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-unsafe-assignment': 'off',
-    },
-  },
-  {
-    files: ['src/test/webapp/e2e/integration/**/*.ts'],
-    extends: [...typescript.configs.recommendedTypeChecked, cypress.configs.recommended],
-    languageOptions: {
-      parserOptions: {
-        project: ['src/test/webapp/e2e/tsconfig.json'],
+        project: ['src/test/webapp/*/tsconfig.json'],
       },
     },
     rules: {
