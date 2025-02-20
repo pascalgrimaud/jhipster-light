@@ -1,0 +1,9 @@
+@use '../../token/size';
+
+.jhlite-landscape-rank-module-filter {
+  &--ranks {
+    display: flex;
+    gap: size.$jhlite-global-size-field-padding;
+    align-items: center;
+  }
+}

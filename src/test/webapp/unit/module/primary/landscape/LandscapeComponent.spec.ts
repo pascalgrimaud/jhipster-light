@@ -11,6 +11,7 @@ import { ModulesRepository } from '@/module/domain/ModulesRepository';
 import { ModulesToApply } from '@/module/domain/ModulesToApply';
 import { LandscapeVue } from '@/module/primary/landscape';
 import { LandscapePresetConfigurationVue } from '@/module/primary/landscape-preset-configuration';
+import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { BodyCursorUpdater } from '@/module/primary/landscape/BodyCursorUpdater';
 import { LandscapeScroller } from '@/module/primary/landscape/LandscapeScroller';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
@@ -1179,6 +1180,19 @@ describe('Landscape', () => {
       expect(presetDropdown.element.value).toBe('');
     });
 
+    it('should deselect preset option when a rank button is clicked', async () => {
+      const { wrapper, presetComponent } = await setupAndSelectPreset('init-maven');
+      const rankComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
+
+      const rankButton = rankComponent.find(wrappedElement('rank-RANK_S-filter'));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      const presetDropdown = presetComponent.find('select');
+      expect(presetDropdown.element.value).toBe('');
+    });
+
     const setupAndSelectPreset = async (presetValue: string) => {
       const { wrapper, presetComponent } = await setupPresetTest();
 
@@ -1371,6 +1385,75 @@ describe('Landscape', () => {
       landscapeContainer.getBoundingClientRect = mockContainerRect;
 
       return { mockModuleRect, mockContainerRect, landscapeContainer };
+    };
+  });
+
+  describe('Rank module filter', () => {
+    it('should render the rank module filter', async () => {
+      const { rankComponent } = await setupRankTest();
+
+      expect(rankComponent.exists()).toBe(true);
+    });
+
+    it('should filter modules from selected rank', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
+
+      await expectModulesVisibility(wrapper, {
+        infinitest: true,
+        init: true,
+        vue: true,
+        'java-base': true,
+      });
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(false);
+    });
+
+    it('should show all modules when deselect rank', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
+
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_S');
+
+      await expectModulesVisibility(wrapper, {
+        infinitest: true,
+        init: true,
+        vue: true,
+        'java-base': true,
+      });
+      expect(wrapper.find(wrappedElement('spring-boot-module')).exists()).toBe(true);
+    });
+
+    it('should present distinctly with minimal emphasis on dependency modules of different ranks than the selected one', async () => {
+      const { wrapper, rankComponent } = await setupRankTest();
+
+      await triggerRankFilter(wrapper, rankComponent, 'RANK_D');
+
+      expect(wrapper.find(wrappedElement('init-module')).exists()).toBe(true);
+      expect(wrapper.find(wrappedElement('init-module')).classes()).toContain('-diff-rank-minimal-emphasis');
+    });
+
+    const setupRankTest = async () => {
+      const wrapper = await componentWithLandscape();
+      const rankComponent = wrapper.findComponent(LandscapeRankModuleFilterVue);
+
+      return { wrapper, rankComponent };
+    };
+
+    const triggerRankFilter = async (wrapper: VueWrapper, rankComponent: VueWrapper, rank: string): Promise<void> => {
+      const rankButton = rankComponent.find(wrappedElement(`rank-${rank}-filter`));
+      await rankButton.trigger('click');
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+    };
+
+    const expectModulesVisibility = async (wrapper: VueWrapper, expectations: Record<string, boolean>) => {
+      await flushPromises();
+      await wrapper.vm.$nextTick();
+
+      Object.entries(expectations).forEach(([module, shouldExist]) => {
+        expect(wrapper.find(wrappedElement(`${module}-module`)).exists()).toBe(shouldExist);
+      });
     };
   });
 });

@@ -8,6 +8,8 @@ import {
 import { AnchorPointState } from '@/module/domain/AnchorPointState';
 import { ModuleParameter } from '@/module/domain/ModuleParameter';
 import { ModulePropertyDefinition } from '@/module/domain/ModulePropertyDefinition';
+import type { ModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
+import { toModuleRankStatistics } from '@/module/domain/ModuleRankStatistics';
 import { ModuleSlug } from '@/module/domain/ModuleSlug';
 import { Preset } from '@/module/domain/Preset';
 import { ProjectHistory } from '@/module/domain/ProjectHistory';
@@ -19,6 +21,8 @@ import { LandscapeFeatureSlug } from '@/module/domain/landscape/LandscapeFeature
 import { LandscapeLevel } from '@/module/domain/landscape/LandscapeLevel';
 import { LandscapeModule } from '@/module/domain/landscape/LandscapeModule';
 import { LandscapeSelectionElement } from '@/module/domain/landscape/LandscapeSelectionElement';
+import { ModuleRank } from '@/module/domain/landscape/ModuleRank';
+import { LandscapeRankModuleFilterVue } from '@/module/primary/landscape-rank-module-filter';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
 import { IconVue } from '@/shared/icon/infrastructure/primary';
 import { Loader } from '@/shared/loader/infrastructure/primary/Loader';
@@ -46,6 +50,7 @@ export default defineComponent({
     LandscapeLoaderVue,
     LandscapeMiniMapVue,
     LandscapePresetConfigurationVue,
+    LandscapeRankModuleFilterVue,
   },
   setup() {
     const applicationListener = inject(APPLICATION_LISTENER);
@@ -58,6 +63,7 @@ export default defineComponent({
     const selectedMode = ref<DisplayMode>('COMPACTED');
 
     const landscape = ref(Loader.loading<Landscape>());
+    const originalLandscape = ref(Loader.loading<Landscape>());
     const levels = ref(Loader.loading<LandscapeLevel[]>());
 
     const canLoadMiniMap = ref(false);
@@ -89,6 +95,9 @@ export default defineComponent({
     const selectedPresetName = computed(() => selectedPreset.value?.name ?? '');
 
     const highlightedModule = ref<Optional<ModuleSlug>>(Optional.empty());
+
+    const selectedRank = ref<Optional<ModuleRank>>(Optional.empty());
+    const moduleRankStatistics = ref<ModuleRankStatistics>([]);
 
     onMounted(() => {
       modules
@@ -142,6 +151,8 @@ export default defineComponent({
     };
 
     const loadLandscape = async (response: Landscape): Promise<void> => {
+      originalLandscape.value.loaded(response);
+
       landscape.value.loaded(response);
       levels.value.loaded(response.standaloneLevels());
 
@@ -152,6 +163,7 @@ export default defineComponent({
 
       canLoadMiniMap.value = true;
       loadAnchorPointModulesMap();
+      loadLandscapeRankModuleFilterProperty();
     };
 
     const loadAnchorPointModulesMap = (): void => {
@@ -176,6 +188,10 @@ export default defineComponent({
           anchorPointModulesMap.value.set(endingElementSlug, { atStart: endingElementSlugExists.atStart, atEnd: true });
         }
       });
+    };
+
+    const loadLandscapeRankModuleFilterProperty = (): void => {
+      moduleRankStatistics.value = toModuleRankStatistics(landscapeValue());
     };
 
     type Navigation = 'ArrowLeft' | 'ArrowRight' | 'ArrowUp' | 'ArrowDown' | 'Space';
@@ -311,6 +327,7 @@ export default defineComponent({
         + flavorClass()
         + anchorPointClass(module)
         + searchHighlightClass(module)
+        + diffRankMinimalEmphasisClass(module)
       );
     };
 
@@ -388,6 +405,17 @@ export default defineComponent({
       return highlightedModule.value
         .filter(highlighted => highlighted.get() === module.get())
         .map(() => ' -search-highlighted')
+        .orElse('');
+    };
+
+    const diffRankMinimalEmphasisClass = (module: LandscapeElementId): string => {
+      if (module instanceof LandscapeFeatureSlug) {
+        return '';
+      }
+
+      return selectedRank.value
+        .map(rank => landscapeValue().hasModuleDifferentRank(module, rank))
+        .map(hasDifferentRank => (hasDifferentRank ? ' -diff-rank-minimal-emphasis' : ''))
         .orElse('');
     };
 
@@ -620,6 +648,30 @@ export default defineComponent({
       }
     };
 
+    const handleRankFilter = (rank: ModuleRank | undefined): void => {
+      clearPresetSelection();
+
+      selectedRank.value = Optional.ofNullable(rank);
+      void reloadLandscape(originalLandscape.value.value().filterByRank(selectedRank.value));
+    };
+
+    const reloadLandscape = async (response: Landscape): Promise<void> => {
+      landscape.value.loaded(response);
+      levels.value.loaded(response.standaloneLevels());
+
+      await rebuildLandscapeElements();
+
+      await nextTick().then(updateConnectors);
+      landscapeNavigation.value.loaded(new LandscapeNavigation(landscapeElements.value, levels.value.value()));
+      loadAnchorPointModulesMap();
+    };
+
+    const rebuildLandscapeElements = async (): Promise<void> => {
+      // Wait for DOM update before clearing and rebuilding refs
+      await nextTick();
+      landscapeElements.value = new Map<string, HTMLElement>();
+    };
+
     return {
       levels,
       isFeature,
@@ -662,6 +714,8 @@ export default defineComponent({
       canLoadMiniMap,
       selectedPresetName,
       performSearch,
+      handleRankFilter,
+      moduleRankStatistics,
     };
   },
 });

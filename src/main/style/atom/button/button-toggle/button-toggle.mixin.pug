@@ -1,0 +1,5 @@
+mixin jhlite-button-toggle(opts)
+  - const { active, disabled } = opts || {};
+  - const activeClass = active ? '-active' : null;
+  button.jhlite-button-toggle(class=activeClass, disabled=disabled)
+    block

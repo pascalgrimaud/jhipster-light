@@ -1,0 +1,16 @@
+<div class="landscape-rank-module-filter">
+  <div class="jhlite-landscape-rank-module-filter--ranks">
+    <button
+      v-for="rank in ranks"
+      :key="rank"
+      class="jhlite-button-toggle"
+      :class="{ '-active': isRankSelected(rank) }"
+      @click="toggleRank(rank)"
+      :data-testid="`rank-${rank}-filter`"
+      :title="getRankDescription(rank)"
+      :disabled="isRankDisabled(rank)"
+    >
+      {{ formatRank(rank) }}
+    </button>
+  </div>
+</div>

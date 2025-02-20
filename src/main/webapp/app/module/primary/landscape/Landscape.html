@@ -28,6 +28,9 @@
   <div class="jhlite-menu-content-template--content">
     <div class="jhipster-landscape-content">
       <div class="jhipster-landscape-content--header">
+        <div class="jhipster-landscape-rank-module-selection">
+          <LandscapeRankModuleFilterVue :moduleRankStatistics="moduleRankStatistics" @selected="handleRankFilter" />
+        </div>
         <div class="jhipster-landscape-search-container">
           <div class="jhipster-landscape-search">
             <div class="jhlite-field--field">
