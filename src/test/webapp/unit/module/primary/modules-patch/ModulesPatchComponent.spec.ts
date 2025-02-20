@@ -8,7 +8,7 @@ import { ProjectFoldersRepository } from '@/module/domain/ProjectFoldersReposito
 import { ModulesVue } from '@/module/primary/modules-patch';
 import { ALERT_BUS } from '@/shared/alert/application/AlertProvider';
 import { VueWrapper, flushPromises, mount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { wrappedElement } from '../../../WrappedElement';
 import { stubAlertBus } from '../../../shared/alert/domain/AlertBus.fixture';
 import { ModuleParametersRepositoryStub, stubModuleParametersRepository } from '../../domain/ModuleParameters.fixture';
@@ -65,6 +65,7 @@ describe('Modules', () => {
     });
 
     it('should catch error when waiting for modules error', () => {
+      const consoleErrors = vi.spyOn(console, 'error').mockImplementation(() => {});
       try {
         const { modules, projectFolders, moduleParameters }: WrapperOptions = {
           modules: repositoryWithModulesError(),
@@ -84,6 +85,7 @@ describe('Modules', () => {
           expect(e.message).toBe('repositoryWithModulesError');
         }
         expect(console.error).toHaveBeenCalled();
+        consoleErrors.mockRestore();
       }
     });
 
